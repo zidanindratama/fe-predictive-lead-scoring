@@ -27,7 +27,7 @@ export function Navbar() {
   }, [open]);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-gray-600 font-sans">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b bg-black border-gray-600 font-sans">
       <nav className="md:grid md:grid-cols-3 flex items-center md:justify-items-center justify-between py-8 px-6 min-w-screen">
 
         {/* Desktop version */}
@@ -36,7 +36,7 @@ export function Navbar() {
             <li key={item.href}>
               <Link
                 href={item.href}
-                className={cn("text-md font-medium transition-colors hover:text-primary", pathName === item.href ? "text-primary" : "text-gray-600")}
+                className={cn("text-sm font-medium transition-colors hover:text-primary", pathName === item.href ? "text-primary" : "text-gray-600")}
               >
                 {item.label}
               </Link>

@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Navbar } from "@/components/site-navbar";
+import { Footer } from "@/components/site-footer";
 import { Poppins } from "next/font/google";
 
 export const metadata = {
@@ -26,6 +27,7 @@ export default function MainLayout({
       <body className={`${poppins.variable} antialiased`}>
         <Navbar />
         <main className="min-h-[calc(100dvh-64px-200px)]">{children}</main>  
+        <Footer />
       </body>
       
     </>
