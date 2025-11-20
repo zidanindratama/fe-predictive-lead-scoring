@@ -56,12 +56,12 @@ export const Navbar = () => {
 
         <div className="hidden md:flex items-center gap-2">
           <ModeToggle className="mr-2" />
-          <Link href="/login">
+          <Link href="/auth/sign-in">
             <Button variant="ghost" size="sm">
               Log in
             </Button>
           </Link>
-          <Link href="/register">
+          <Link href="/auth/sign-up">
             <Button size="sm" className="rounded-full px-6">
               Get Started
             </Button>
@@ -98,11 +98,11 @@ export const Navbar = () => {
                 </Link>
               ))}
               <div className="flex flex-col gap-4 mt-8 w-full px-12">
-                <Button className="w-full" size="lg">
-                  Get Started
+                <Button className="w-full" size="lg" asChild>
+                  <Link href={"/auth/sign-up"}>Get Started</Link>
                 </Button>
                 <Button variant="outline" className="w-full" size="lg">
-                  Log in
+                  <Link href={"/auth/sign-in"}>Log in</Link>
                 </Button>
               </div>
             </motion.div>
