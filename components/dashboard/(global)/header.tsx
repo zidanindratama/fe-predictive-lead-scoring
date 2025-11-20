@@ -33,7 +33,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { navItems, navSecondary } from "@/config/dashboard-nav";
 import { cn } from "@/lib/utils";
 import { UserNav } from "@/components/dashboard/(global)/user-nav";
@@ -60,9 +59,10 @@ export function Header({ isCollapsed, setIsCollapsed }: HeaderProps) {
               <PanelLeftOpen className="h-5 w-5" />
             </Button>
           </SheetTrigger>
+
           <SheetContent
             side="left"
-            className="p-0 w-[280px] bg-[#09090b] border-r border-white/10 text-white flex flex-col"
+            className="p-0 w-[280px] h-full max-h-screen bg-[#09090b] border-r border-white/10 text-white flex flex-col"
           >
             <SheetHeader className="h-20 flex items-center px-6 border-b border-white/5 shrink-0">
               <Link href={"/"} className="flex items-center gap-3 w-full">
@@ -80,7 +80,7 @@ export function Header({ isCollapsed, setIsCollapsed }: HeaderProps) {
               </Link>
             </SheetHeader>
 
-            <ScrollArea className="flex-1 px-4 py-6">
+            <div className="flex-1 overflow-y-auto px-4 py-6">
               <nav className="flex flex-col gap-2">
                 {navItems.map((item, index) => {
                   const isActive =
@@ -177,7 +177,7 @@ export function Header({ isCollapsed, setIsCollapsed }: HeaderProps) {
                   </Link>
                 ))}
               </nav>
-            </ScrollArea>
+            </div>
 
             <div className="p-4 border-t border-white/5 bg-[#09090b] shrink-0">
               <UserNav side="top" align="center" />
