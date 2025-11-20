@@ -48,7 +48,7 @@ export const ContactForm = () => {
                   {
                     icon: MapPin,
                     label: "Visit Us",
-                    value: "Silicon Valley, CA",
+                    value: "Kelapa Dua, Depok",
                     link: "#",
                   },
                   {
@@ -81,7 +81,7 @@ export const ContactForm = () => {
 
             <div className="relative z-10 mt-12 pt-8 border-t border-white/10">
               <p className="text-zinc-500 text-sm">
-                &copy; 2024 SmartBank Inc. <br /> All secure communications
+                &copy; 2025 SmartBank Inc. <br /> All secure communications
                 encrypted.
               </p>
             </div>
