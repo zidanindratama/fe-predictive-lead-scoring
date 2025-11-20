@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Zap, BarChart3, Lock } from "lucide-react";
+import Link from "next/link";
 
 export const HeroSection = () => {
   const containerRef = useRef(null);
@@ -104,15 +105,19 @@ export const HeroSection = () => {
           <Button
             size="lg"
             className="h-14 px-8 rounded-full text-lg bg-foreground text-background hover:bg-foreground/90 transition-all hover:scale-105"
+            asChild
           >
-            Start Analysis <ArrowRight className="ml-2 w-5 h-5" />
+            <Link href={"/auth/sign-in"}>
+              Start Analysis <ArrowRight className="ml-2 w-5 h-5" />
+            </Link>
           </Button>
           <Button
             variant="outline"
             size="lg"
             className="h-14 px-8 rounded-full text-lg border-border bg-background/50 backdrop-blur-sm hover:bg-background/80"
+            asChild
           >
-            Book a Demo
+            <Link href={"/workflow"}>Learn More</Link>
           </Button>
         </motion.div>
       </motion.div>

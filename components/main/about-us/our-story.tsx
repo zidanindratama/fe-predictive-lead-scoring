@@ -21,7 +21,7 @@ export const OurStory = () => {
 
               <div className="absolute bottom-8 left-8 right-8 p-6 bg-background/10 backdrop-blur-xl border border-primary/10 dark:border-white/10 rounded-2xl">
                 <div className="text-4xl font-bold text-primary dark:text-white mb-2">
-                  2024
+                  2025
                 </div>
                 <div className="text-primary dark:text-white/80 text-sm">
                   SmartBank founded with a mission to democratize AI for

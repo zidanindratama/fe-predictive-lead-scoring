@@ -46,7 +46,7 @@ export const CTASection = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 w-full justify-center">
-              <Link href="/register" className="w-full sm:w-auto">
+              <Link href="/auth/sign-up" className="w-full sm:w-auto">
                 <Button
                   size="lg"
                   className="w-full sm:w-auto h-16 px-8 rounded-full bg-white text-black hover:bg-white/90 hover:scale-105 transition-all duration-300 text-lg font-semibold group shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)]"
