@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import {
   Menu,
@@ -28,7 +28,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { useGetData } from "@/hooks/use-get-data";
-import { axiosInstance, setAccessToken } from "@/lib/axios";
+import { axiosInstance, getAccessToken, setAccessToken } from "@/lib/axios";
 
 const navLinks = [
   { name: "About Us", href: "/about-us" },
@@ -77,35 +77,45 @@ export const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
 
-  const { data: user, isLoading } = useGetData<{
+  const {
+    data: apiUser,
+    isLoading,
+    refetch,
+  } = useGetData<{
     name: string;
     email: string;
     avatarUrl?: string;
     role: string;
-  }>(["me"], "/auth/me", undefined, { retry: false });
+  }>(["me"], "/auth/me", undefined, {
+    retry: false,
+    refetchOnMount: "always",
+  });
+
+  const [hasToken, setHasToken] = useState(false);
+
+  useEffect(() => {
+    const token = getAccessToken();
+    setHasToken(!!token);
+    refetch();
+  }, [pathname, refetch]);
+
+  const user = hasToken ? apiUser : null;
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
-
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      document.body.style.overflow = "unset";
-    };
-  }, [isOpen]);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleLogout = async () => {
     try {
       await axiosInstance.delete("/auth/logout");
       setAccessToken(null);
+      setHasToken(false);
       toast.success("Logged out successfully");
+
       window.location.reload();
     } catch (error) {
       console.error("Logout failed", error);
