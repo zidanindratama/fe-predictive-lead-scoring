@@ -31,9 +31,9 @@ export const usePostData = <T, D, TContext = unknown>(
       }
     },
     onError: (...args) => {
-      const error = args[0];
+      const error = args[0] as AxiosError<any>;
       const errorMessage =
-        (error as AxiosError<{ message: string }>)?.response?.data?.message ||
+        error.response?.data?.error?.message ||
         error.message ||
         "Failed to create data";
 
