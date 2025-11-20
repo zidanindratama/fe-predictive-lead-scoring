@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { ChevronRight, PanelLeftClose, Command } from "lucide-react";
+import { ChevronRight, Command } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -84,7 +84,11 @@ export function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
           <TooltipProvider delayDuration={0}>
             {navItems.map((item, index) => {
               const isActive =
-                pathname === item.url || pathname.startsWith(item.url + "/");
+                item.url === "/dashboard"
+                  ? pathname === "/dashboard"
+                  : pathname === item.url ||
+                    pathname.startsWith(item.url + "/");
+
               const hasSubmenu = item.items && item.items.length > 0;
 
               if (isCollapsed) {

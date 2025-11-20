@@ -2,13 +2,70 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { motion } from "framer-motion";
+import {
+  ArrowRight,
+  Mail,
+  Lock,
+  Fingerprint,
+  Eye,
+  EyeOff,
+  Loader2,
+} from "lucide-react";
+import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { motion } from "framer-motion";
-import { ArrowRight, Mail, Lock, Fingerprint, Eye, EyeOff } from "lucide-react";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { usePostData } from "@/hooks/use-post-data";
+import { setAccessToken } from "@/lib/axios";
+
+const loginSchema = z.object({
+  email: z.string().email({ message: "Please enter a valid email address" }),
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters" }),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
+
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const { mutate: login, isPending } = usePostData<
+    { user: any; accessToken: string },
+    LoginFormValues
+  >("/auth/login", [], {
+    onSuccess: (data) => {
+      setAccessToken(data.accessToken);
+      toast.success("Login successful! Redirecting...");
+      router.push("/dashboard");
+    },
+  });
+
+  const onSubmit = (values: LoginFormValues) => {
+    login(values);
+  };
 
   return (
     <div className="w-full h-screen grid grid-cols-1 lg:grid-cols-2 overflow-hidden bg-background">
@@ -76,64 +133,103 @@ const SignIn = () => {
             </p>
           </motion.div>
 
-          <motion.form
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="space-y-5"
           >
-            <div className="space-y-2">
-              <label className="text-sm font-medium leading-none">
-                Email Address
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="email"
-                  placeholder="john@company.com"
-                  className="pl-10 h-12 bg-secondary/20 border-transparent focus:border-primary/50 focus:bg-background transition-all"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label className="text-sm font-medium leading-none">
-                  Password
-                </label>
-                <Link
-                  href="#"
-                  className="text-xs font-medium text-primary hover:underline"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-              <div className="relative">
-                <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="••••••••"
-                  className="pl-10 pr-10 h-12 bg-secondary/20 border-transparent focus:border-primary/50 focus:bg-background transition-all"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3 text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-5"
+              >
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium leading-none">
+                        Email Address
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                          <Input
+                            {...field}
+                            type="email"
+                            placeholder="john@company.com"
+                            className="pl-10 h-12 bg-secondary/20 border-transparent focus:border-primary/50 focus:bg-background transition-all"
+                            disabled={isPending}
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )}
-                </button>
-              </div>
-            </div>
+                />
 
-            <Button className="w-full h-12 text-base rounded-xl group bg-primary hover:bg-primary/90">
-              Sign In
-              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-            </Button>
-          </motion.form>
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center justify-between">
+                        <FormLabel className="text-sm font-medium leading-none">
+                          Password
+                        </FormLabel>
+                        <Link
+                          href="#"
+                          className="text-xs font-medium text-primary hover:underline"
+                        >
+                          Forgot password?
+                        </Link>
+                      </div>
+                      <FormControl>
+                        <div className="relative">
+                          <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                          <Input
+                            {...field}
+                            type={showPassword ? "text" : "password"}
+                            placeholder="••••••••"
+                            className="pl-10 pr-10 h-12 bg-secondary/20 border-transparent focus:border-primary/50 focus:bg-background transition-all"
+                            disabled={isPending}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-3 top-3 text-muted-foreground hover:text-foreground transition-colors"
+                            disabled={isPending}
+                          >
+                            {showPassword ? (
+                              <EyeOff className="h-4 w-4" />
+                            ) : (
+                              <Eye className="h-4 w-4" />
+                            )}
+                          </button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <Button
+                  type="submit"
+                  disabled={isPending}
+                  className="w-full h-12 text-base rounded-xl group bg-primary hover:bg-primary/90"
+                >
+                  {isPending ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <>
+                      Sign In
+                      <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                    </>
+                  )}
+                </Button>
+              </form>
+            </Form>
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0 }}

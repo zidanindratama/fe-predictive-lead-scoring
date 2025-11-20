@@ -84,8 +84,11 @@ export function Header({ isCollapsed, setIsCollapsed }: HeaderProps) {
               <nav className="flex flex-col gap-2">
                 {navItems.map((item, index) => {
                   const isActive =
-                    pathname === item.url ||
-                    pathname.startsWith(item.url + "/");
+                    item.url === "/dashboard"
+                      ? pathname === "/dashboard"
+                      : pathname === item.url ||
+                        pathname.startsWith(item.url + "/");
+
                   const hasSubmenu = item.items && item.items.length > 0;
 
                   return hasSubmenu ? (

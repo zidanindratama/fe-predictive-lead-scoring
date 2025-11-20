@@ -1,13 +1,15 @@
 import {
   LayoutDashboard,
   Users,
+  UserCog,
   Megaphone,
-  LineChart,
   Settings,
   BrainCircuit,
   FileText,
   LifeBuoy,
-  CreditCard,
+  Upload,
+  History,
+  PlusCircle,
 } from "lucide-react";
 
 export const navItems = [
@@ -17,13 +19,42 @@ export const navItems = [
     icon: LayoutDashboard,
   },
   {
+    title: "Users",
+    url: "/dashboard/users",
+    icon: UserCog,
+  },
+  {
     title: "Customers",
     url: "/dashboard/customers",
     icon: Users,
     items: [
-      { title: "All Customers", url: "/dashboard/customers" },
-      { title: "Import Data", url: "/dashboard/customers/import" },
-      { title: "Segments", url: "/dashboard/customers/segments" },
+      {
+        title: "All Customers",
+        url: "/dashboard/customers",
+        icon: Users,
+      },
+      {
+        title: "Import Data",
+        url: "/dashboard/customers/import",
+        icon: Upload,
+      },
+    ],
+  },
+  {
+    title: "Predictions",
+    url: "/dashboard/predictions",
+    icon: BrainCircuit,
+    items: [
+      {
+        title: "Prediction History",
+        url: "/dashboard/predictions",
+        icon: History,
+      },
+      {
+        title: "Single Prediction",
+        url: "/dashboard/predictions/create",
+        icon: PlusCircle,
+      },
     ],
   },
   {
@@ -31,20 +62,15 @@ export const navItems = [
     url: "/dashboard/campaigns",
     icon: Megaphone,
     items: [
-      { title: "Active Campaigns", url: "/dashboard/campaigns/active" },
-      { title: "Drafts", url: "/dashboard/campaigns/drafts" },
-      { title: "Archives", url: "/dashboard/campaigns/archives" },
+      {
+        title: "All Campaigns",
+        url: "/dashboard/campaigns",
+      },
+      {
+        title: "Create Campaign",
+        url: "/dashboard/campaigns/create",
+      },
     ],
-  },
-  {
-    title: "Predictions",
-    url: "/dashboard/predictions",
-    icon: BrainCircuit,
-  },
-  {
-    title: "Analytics",
-    url: "/dashboard/analytics",
-    icon: LineChart,
   },
 ];
 
