@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -23,6 +24,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useGetData } from "@/hooks/use-get-data";
 import { axiosInstance, setAccessToken } from "@/lib/axios";
+import Link from "next/link";
 
 interface UserNavProps {
   isCollapsed?: boolean;
@@ -44,19 +46,23 @@ export function UserNav({
   align = "center",
 }: UserNavProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { data: user } = useGetData<UserProfile>(["me"], "/auth/me");
 
   const handleLogout = async () => {
     try {
       await axiosInstance.delete("/auth/logout");
+
+      setAccessToken(null);
+
+      queryClient.setQueryData(["me"], null);
+
       toast.success("Logged out successfully");
+      router.push("/");
     } catch (error) {
       console.error("Logout failed", error);
       toast.error("Failed to log out");
-    } finally {
-      setAccessToken(null);
-      router.push("/");
     }
   };
 
@@ -132,24 +138,14 @@ export function UserNav({
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="bg-white/10" />
         <DropdownMenuGroup>
-          <DropdownMenuItem className="rounded-lg focus:bg-white/10 focus:text-white cursor-pointer p-2.5">
-            <Sparkles className="mr-2 h-4 w-4 text-yellow-500" />
-            <span>Upgrade to Pro</span>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator className="bg-white/10" />
-        <DropdownMenuGroup>
-          <DropdownMenuItem className="rounded-lg focus:bg-white/10 focus:text-white cursor-pointer p-2.5">
-            <User className="mr-2 h-4 w-4" />
-            <span>Account</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem className="rounded-lg focus:bg-white/10 focus:text-white cursor-pointer p-2.5">
-            <CreditCard className="mr-2 h-4 w-4" />
-            <span>Billing</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem className="rounded-lg focus:bg-white/10 focus:text-white cursor-pointer p-2.5">
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
+          <DropdownMenuItem
+            className="rounded-lg focus:bg-white/10 focus:text-white cursor-pointer p-2.5"
+            asChild
+          >
+            <Link href={"/dashboard/my-account"}>
+              <User className="mr-2 h-4 w-4" />
+              <span>Account</span>
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator className="bg-white/10" />

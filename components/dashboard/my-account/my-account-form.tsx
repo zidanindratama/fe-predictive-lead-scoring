@@ -1,29 +1,22 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Camera, Info, Loader2, Save, Trash2 } from "lucide-react";
+import { Camera, Loader2, Save, Shield, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import {
   Card,
@@ -32,73 +25,53 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
 import { useGetData } from "@/hooks/use-get-data";
 import { usePatchData } from "@/hooks/use-patch-data";
 import { useUploadData } from "@/hooks/use-upload-data";
 import { PLACEHOLDER_IMAGE } from "@/config/const";
 
-const ROLES = ["ADMIN", "STAFF", "USER"] as const;
-
-const userFormSchema = z.object({
+const profileFormSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-  role: z.enum(ROLES, { message: "Please select a valid role." }),
   avatarUrl: z.string().optional(),
 });
 
-type UserFormValues = z.infer<typeof userFormSchema>;
+type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
-interface UserFormUpdateProps {
-  userId: string;
-}
-
-function normalizeRole(input?: string): (typeof ROLES)[number] {
-  const val = (input ?? "USER").toString().toUpperCase();
-  const cast = val as (typeof ROLES)[number];
-  return ROLES.includes(cast) ? cast : "USER";
-}
-
-export function UserFormUpdate({ userId }: UserFormUpdateProps) {
-  const router = useRouter();
-
+export function MyAccountForm() {
   const { data: user, isLoading: isLoadingUser } = useGetData<{
     id: string;
     name: string;
     email: string;
-    role: "ADMIN" | "STAFF" | "USER";
+    role: string;
     avatarUrl?: string;
-  }>(["users", userId], `/users/${userId}`, undefined, {
-    enabled: !!userId,
-  });
+  }>(["me"], "/auth/me");
 
-  const form = useForm<UserFormValues>({
-    resolver: zodResolver(userFormSchema),
+  const form = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileFormSchema),
     defaultValues: {
       name: "",
-      role: "USER",
-      avatarUrl: "",
+      avatarUrl: PLACEHOLDER_IMAGE,
     },
   });
 
   useEffect(() => {
     if (user) {
       form.reset({
-        name: user?.name || "",
-        role: normalizeRole(user?.role),
-        avatarUrl: user?.avatarUrl || PLACEHOLDER_IMAGE,
+        name: user.name,
+        avatarUrl: user.avatarUrl || PLACEHOLDER_IMAGE,
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [user, form]);
 
   const { mutate: uploadImage, isPending: isUploading } = useUploadData<{
     url: string;
   }>("/uploads/image", [], {
     onSuccess: (data) => {
       form.setValue("avatarUrl", data.url, { shouldDirty: true });
-      toast.success("Image uploaded successfully");
+      toast.success("Avatar uploaded successfully");
     },
     onError: () => {
       toast.error("Failed to upload image");
@@ -119,23 +92,22 @@ export function UserFormUpdate({ userId }: UserFormUpdateProps) {
     toast.info("Avatar reset to default");
   };
 
-  const { mutate: updateUser, isPending: isSaving } = usePatchData<
+  const { mutate: updateProfile, isPending: isSaving } = usePatchData<
     any,
-    UserFormValues
-  >("/users", [["users"], ["users", userId]], {
+    ProfileFormValues
+  >("/auth/me", [["me"]], {
     onSuccess: () => {
-      toast.success("User updated successfully");
-      router.push("/dashboard/users");
+      toast.success("Profile updated successfully");
     },
   });
 
-  const onSubmit = (data: UserFormValues) => {
-    updateUser({ id: userId, data });
+  const onSubmit = (data: ProfileFormValues) => {
+    updateProfile({ data });
   };
 
   if (isLoadingUser) {
     return (
-      <Card className="border-slate-200 dark:border-zinc-800 w-full">
+      <Card className="border-slate-200 dark:border-zinc-800 w-full animate-in fade-in">
         <CardHeader>
           <Skeleton className="h-6 w-32" />
           <Skeleton className="h-4 w-64" />
@@ -150,18 +122,17 @@ export function UserFormUpdate({ userId }: UserFormUpdateProps) {
           </div>
           <Skeleton className="h-10 w-full" />
           <Skeleton className="h-10 w-full" />
-          <Skeleton className="h-10 w-full" />
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-sm rounded-2xl w-full">
+    <Card className="border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-sm rounded-2xl w-full animate-in fade-in duration-500">
       <CardHeader>
-        <CardTitle>User Information</CardTitle>
+        <CardTitle>My Profile</CardTitle>
         <CardDescription>
-          Make changes to the user profile here. Email is read-only.
+          Manage your personal account settings and preferences.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -179,7 +150,7 @@ export function UserFormUpdate({ userId }: UserFormUpdateProps) {
                   </AvatarFallback>
                 </Avatar>
                 <label
-                  htmlFor="avatar-upload"
+                  htmlFor="avatar-upload-me"
                   className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-all cursor-pointer text-white hover:bg-black/50"
                 >
                   {isUploading ? (
@@ -189,7 +160,7 @@ export function UserFormUpdate({ userId }: UserFormUpdateProps) {
                   )}
                 </label>
                 <input
-                  id="avatar-upload"
+                  id="avatar-upload-me"
                   type="file"
                   accept="image/*"
                   className="hidden"
@@ -261,72 +232,26 @@ export function UserFormUpdate({ userId }: UserFormUpdateProps) {
                 )}
               />
 
-              <div className="md:col-span-2 space-y-3">
-                <FormField
-                  control={form.control}
-                  name="role"
-                  render={({ field }) => {
-                    const value = (field.value ?? "USER") as string;
-                    return (
-                      <FormItem>
-                        <FormLabel>Role & Permissions</FormLabel>
-                        <Select
-                          key={field.value}
-                          value={value}
-                          onValueChange={field.onChange}
-                        >
-                          <FormControl>
-                            <SelectTrigger className="w-full bg-background">
-                              <SelectValue placeholder="Select a role" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="USER">User</SelectItem>
-                            <SelectItem value="STAFF">Staff</SelectItem>
-                            <SelectItem value="ADMIN">Admin</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-
-                <Alert className="bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-900">
-                  <Info className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                  <AlertTitle className="text-blue-700 dark:text-blue-300 font-semibold mb-2">
-                    Access Level Guide
-                  </AlertTitle>
-                  <AlertDescription className="text-blue-600 dark:text-blue-300/90 text-xs leading-relaxed">
-                    <ul className="list-disc pl-4 space-y-1">
-                      <li>
-                        <span className="font-bold">Admin:</span> Full system
-                        access, user management, and critical settings.
-                      </li>
-                      <li>
-                        <span className="font-bold">Staff:</span> Can manage
-                        customer data, campaigns, and view analytics.
-                      </li>
-                      <li>
-                        <span className="font-bold">User:</span> Read-only
-                        access to public dashboard data.
-                      </li>
-                    </ul>
-                  </AlertDescription>
-                </Alert>
+              <div className="md:col-span-2 flex flex-col gap-2">
+                <span className="text-sm font-medium">Your Role</span>
+                <div className="p-3 border rounded-lg bg-slate-50 dark:bg-zinc-900/50 flex items-center gap-3">
+                  <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-md text-blue-600 dark:text-blue-400">
+                    <Shield className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm">{user?.role}</p>
+                    <p className="text-xs text-muted-foreground">
+                      You have {user?.role?.toLowerCase()} access permissions.
+                    </p>
+                  </div>
+                  <Badge variant="outline" className="ml-auto capitalize">
+                    {user?.role?.toLowerCase()}
+                  </Badge>
+                </div>
               </div>
             </div>
 
-            <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-6 border-t border-slate-100 dark:border-zinc-900">
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full sm:w-auto"
-                onClick={() => router.back()}
-                disabled={isSaving || isUploading}
-              >
-                Cancel
-              </Button>
+            <div className="flex justify-end pt-6 border-t border-slate-100 dark:border-zinc-900">
               <Button
                 type="submit"
                 disabled={isSaving || isUploading}
@@ -335,12 +260,12 @@ export function UserFormUpdate({ userId }: UserFormUpdateProps) {
                 {isSaving ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Saving...
+                    Saving Changes...
                   </>
                 ) : (
                   <>
                     <Save className="mr-2 h-4 w-4" />
-                    Save Changes
+                    Update Profile
                   </>
                 )}
               </Button>
