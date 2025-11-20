@@ -12,7 +12,7 @@ export default function DashboardUserUpdatePage() {
   const userId = params.id as string;
 
   return (
-    <div className="flex flex-col space-y-6 p-8 mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="flex flex-col space-y-6 mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex items-center gap-4">
         <Button
           variant="outline"
