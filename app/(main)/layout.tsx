@@ -1,5 +1,5 @@
-import { Footer } from "@/components/main/footer";
-import { Navbar } from "@/components/main/navbar";
+import { Footer } from "@/components/main/(global)/footer";
+import { Navbar } from "@/components/main/(global)/navbar";
 import * as React from "react";
 
 export default function MainLayout({

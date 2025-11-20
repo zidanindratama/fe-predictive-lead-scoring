@@ -18,7 +18,6 @@ export const SystemArchitecture = () => {
         </div>
 
         <div className="relative grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
-          {/* Connecting Lines (Desktop Only) */}
           <svg className="absolute top-1/2 left-0 w-full h-20 -translate-y-1/2 hidden lg:block pointer-events-none z-0">
             <line
               x1="10%"
@@ -52,7 +51,6 @@ export const SystemArchitecture = () => {
             />
           </svg>
 
-          {/* Node 1: The API Core */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -78,7 +76,6 @@ export const SystemArchitecture = () => {
             </div>
           </motion.div>
 
-          {/* Node 2: The ML Engine */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -109,7 +106,6 @@ export const SystemArchitecture = () => {
             </div>
           </motion.div>
 
-          {/* Node 3: Data Storage */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
