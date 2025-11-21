@@ -3,13 +3,12 @@
 import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { UserFormUpdate } from "@/components/dashboard/users/user-form-update";
+import { CampaignFormUpdate } from "@/components/dashboard/campaigns/campaign-form-update";
 
-export default function DashboardUserUpdatePage() {
+export default function DashboardCampaignUpdatePage() {
   const params = useParams();
   const router = useRouter();
-
-  const userId = params.id as string;
+  const id = params.id as string;
 
   return (
     <div className="flex flex-col space-y-6 mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -24,15 +23,15 @@ export default function DashboardUserUpdatePage() {
         </Button>
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
-            Update User
+            Update Campaign
           </h1>
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            Update user details and permissions.
+            Modify campaign criteria and details.
           </p>
         </div>
       </div>
 
-      <UserFormUpdate userId={userId} />
+      <CampaignFormUpdate campaignId={id} />
     </div>
   );
 }

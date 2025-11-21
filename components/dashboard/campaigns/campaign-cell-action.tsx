@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MoreHorizontal, Edit, Trash } from "lucide-react";
+import { MoreHorizontal, Edit, Trash, Eye } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
 import { useQueryClient } from "@tanstack/react-query";
@@ -25,37 +25,39 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useDeleteData } from "@/hooks/use-delete-data";
-import { User } from "./user-columns";
 
-interface UserCellActionProps {
-  data: User;
+import { useDeleteData } from "@/hooks/use-delete-data";
+import { Campaign } from "./campaign-columns";
+
+interface CampaignCellActionProps {
+  data: Campaign;
 }
 
-export const UserCellAction = ({ data }: UserCellActionProps) => {
+export const CampaignCellAction = ({ data }: CampaignCellActionProps) => {
   const [open, setOpen] = useState(false);
 
   const queryClient = useQueryClient();
 
-  const { mutate: deleteUser, isPending } = useDeleteData(
-    "/users",
-    [["users"]],
+  const { mutate: deleteCampaign, isPending: isDeleting } = useDeleteData(
+    "/campaigns",
+    [["campaigns"]],
     {
       onSuccess: () => {
-        toast.success("User deleted successfully");
-
-        queryClient.invalidateQueries({ queryKey: ["users"] });
+        toast.success("Campaign deleted successfully");
+        queryClient.invalidateQueries({ queryKey: ["campaigns"] });
 
         setOpen(false);
       },
       onError: (error: any) => {
-        toast.error(error?.response?.data?.message || "Failed to delete user");
+        toast.error(
+          error?.response?.data?.message || "Failed to delete campaign"
+        );
       },
     }
   );
 
-  const onConfirm = () => {
-    deleteUser(data.id);
+  const onConfirmDelete = () => {
+    deleteCampaign(data.id);
   };
 
   return (
@@ -66,22 +68,22 @@ export const UserCellAction = ({ data }: UserCellActionProps) => {
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete the
-              user{" "}
+              campaign{" "}
               <span className="font-bold text-foreground">{data.name}</span> and
-              remove their data from our servers.
+              remove all associated predictions.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              disabled={isPending}
+              disabled={isDeleting}
               onClick={(e) => {
                 e.preventDefault();
-                onConfirm();
+                onConfirmDelete();
               }}
               className="bg-red-600 focus:ring-red-600 hover:bg-red-700"
             >
-              {isPending ? "Deleting..." : "Delete"}
+              {isDeleting ? "Deleting..." : "Delete"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -94,16 +96,26 @@ export const UserCellAction = ({ data }: UserCellActionProps) => {
             <MoreHorizontal className="h-4 w-4 text-slate-600 dark:text-slate-300" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
+        <DropdownMenuContent align="end" className="w-40">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
           <DropdownMenuItem asChild>
             <Link
-              href={`/dashboard/users/${data.id}/update`}
-              className="flex items-center"
+              href={`/dashboard/campaigns/${data.id}`}
+              className="flex items-center font-medium text-blue-600 focus:text-blue-700 dark:text-blue-400 dark:focus:text-blue-300 cursor-pointer"
             >
-              <Edit className="mr-2 h-4 w-4 text-blue-600" />
-              <span className="text-blue-600">Update</span>
+              <Eye className="mr-2 h-4 w-4 text-blue-600" />
+              View & Run
+            </Link>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem asChild>
+            <Link
+              href={`/dashboard/campaigns/${data.id}/update`}
+              className="flex items-center font-medium text-amber-600 focus:text-amber-700 dark:text-amber-500 dark:focus:text-amber-400 cursor-pointer"
+            >
+              <Edit className="mr-2 h-4 w-4 text-amber-600" />
+              Edit Criteria
             </Link>
           </DropdownMenuItem>
 
@@ -111,7 +123,7 @@ export const UserCellAction = ({ data }: UserCellActionProps) => {
 
           <DropdownMenuItem
             onClick={() => setOpen(true)}
-            className="text-red-600 focus:text-red-600 flex items-center cursor-pointer"
+            className="flex items-center font-medium text-red-600 focus:text-red-700 focus:bg-red-50 dark:focus:bg-red-950/50 cursor-pointer"
           >
             <Trash className="mr-2 h-4 w-4 text-red-600" />
             Delete
