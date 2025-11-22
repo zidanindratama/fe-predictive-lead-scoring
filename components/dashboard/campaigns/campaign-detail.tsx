@@ -322,11 +322,7 @@ export function CampaignDetail({ id }: CampaignDetailProps) {
               </Button>
             </div>
           ) : (
-            <ScrollArea className="h-[500px] lg:h-full w-full">
-              <div className="min-w-[600px] md:min-w-0">
-                <TargetAudienceTable criteria={campaign.criteria} />
-              </div>
-            </ScrollArea>
+            <TargetAudienceTable criteria={campaign.criteria} />
           )}
         </div>
       </div>
