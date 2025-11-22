@@ -1,21 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { motion } from "framer-motion";
-import {
-  ArrowRight,
-  Mail,
-  Lock,
-  Fingerprint,
-  Eye,
-  EyeOff,
-  Loader2,
-} from "lucide-react";
+import { ArrowRight, Mail, Loader2, ShieldQuestion } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -29,47 +20,44 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { usePostData } from "@/hooks/use-post-data";
-import { setAccessToken } from "@/lib/axios";
 
-const loginSchema = z.object({
+const forgotPasswordSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
-  password: z
-    .string()
-    .min(6, { message: "Password must be at least 6 characters" }),
 });
 
-type LoginFormValues = z.infer<typeof loginSchema>;
+type ForgotPasswordValues = z.infer<typeof forgotPasswordSchema>;
 
-const SignIn = () => {
-  const [showPassword, setShowPassword] = useState(false);
+const ForgotPassword = () => {
   const router = useRouter();
 
-  const form = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<ForgotPasswordValues>({
+    resolver: zodResolver(forgotPasswordSchema),
     defaultValues: {
       email: "",
-      password: "",
     },
   });
 
-  const { mutate: login, isPending } = usePostData<
-    { user: any; accessToken: string },
-    LoginFormValues
-  >("/auth/login", [], {
-    onSuccess: (data) => {
-      setAccessToken(data.accessToken);
-      toast.success("Login successful! Redirecting...");
-      router.push("/dashboard");
-    },
-  });
+  const { mutate: sendOtp, isPending } = usePostData<any, ForgotPasswordValues>(
+    "/auth/forgot-password",
+    [],
+    {
+      onSuccess: (_, variables) => {
+        toast.success("OTP sent to your email!");
+        // Redirect ke reset password sambil membawa email agar user tidak perlu ketik ulang
+        router.push(
+          `/auth/reset-password?email=${encodeURIComponent(variables.email)}`
+        );
+      },
+    }
+  );
 
-  const onSubmit = (values: LoginFormValues) => {
-    login(values);
+  const onSubmit = (values: ForgotPasswordValues) => {
+    sendOtp(values);
   };
 
   return (
     <div className="w-full h-screen grid grid-cols-1 lg:grid-cols-2 overflow-hidden bg-background">
-      <div className="hidden lg:flex relative flex-col justify-between p-12 bg-[#080808] text-white overflow-hidden">
+      <div className="hidden lg:flex relative flex-col justify-between p-12 bg-[#0a0a0a] text-white overflow-hidden">
         <div
           className="absolute inset-0 opacity-20 z-0 pointer-events-none"
           style={{
@@ -77,8 +65,8 @@ const SignIn = () => {
           }}
         />
 
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none translate-x-1/3 -translate-y-1/3" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-600/20 blur-[120px] rounded-full pointer-events-none -translate-x-1/3 translate-y-1/3" />
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-orange-500/10 blur-[120px] rounded-full pointer-events-none translate-x-1/3 -translate-y-1/3" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-red-600/10 blur-[120px] rounded-full pointer-events-none -translate-x-1/3 translate-y-1/3" />
 
         <div className="relative z-10">
           <Link href={"/"} className="flex items-center gap-2 mb-8">
@@ -91,21 +79,22 @@ const SignIn = () => {
 
         <div className="relative z-10 max-w-md">
           <h2 className="text-4xl font-bold tracking-tighter leading-tight mb-6">
-            Welcome back, <br />
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-purple-400">
-              Visionary.
+            Forgot your <br />
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-orange-400 to-red-400">
+              Password?
             </span>
           </h2>
           <div className="p-6 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10">
             <div className="flex gap-4 items-start">
-              <div className="p-2 bg-green-500/20 rounded-lg text-green-400">
-                <Fingerprint className="w-5 h-5" />
+              <div className="p-2 bg-orange-500/20 rounded-lg text-orange-400">
+                <ShieldQuestion className="w-5 h-5" />
               </div>
               <div>
-                <h4 className="font-semibold text-sm mb-1">Secure Access</h4>
+                <h4 className="font-semibold text-sm mb-1">Account Recovery</h4>
                 <p className="text-xs text-zinc-400 leading-relaxed">
-                  Your session is protected by enterprise-grade encryption. We
-                  ensure your financial data remains confidential at all times.
+                  Don't worry, it happens to the best of us. Enter your email
+                  and we'll send you a secure OTP to reset your password
+                  instantly.
                 </p>
               </div>
             </div>
@@ -126,10 +115,10 @@ const SignIn = () => {
             className="text-center"
           >
             <h1 className="text-3xl font-bold tracking-tight mb-2">
-              Sign in to your account
+              Reset Password
             </h1>
             <p className="text-muted-foreground">
-              Access your predictive dashboard
+              Enter your email to receive a verification code
             </p>
           </motion.div>
 
@@ -168,51 +157,6 @@ const SignIn = () => {
                   )}
                 />
 
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="flex items-center justify-between">
-                        <FormLabel className="text-sm font-medium leading-none">
-                          Password
-                        </FormLabel>
-                        <Link
-                          href="/auth/forgot-password"
-                          className="text-xs font-medium text-primary hover:underline"
-                        >
-                          Forgot password?
-                        </Link>
-                      </div>
-                      <FormControl>
-                        <div className="relative">
-                          <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                          <Input
-                            {...field}
-                            type={showPassword ? "text" : "password"}
-                            placeholder="••••••••"
-                            className="pl-10 pr-10 h-12 bg-secondary/20 border-transparent focus:border-primary/50 focus:bg-background transition-all"
-                            disabled={isPending}
-                          />
-                          <button
-                            type="button"
-                            onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-3 top-3 text-muted-foreground hover:text-foreground transition-colors"
-                            disabled={isPending}
-                          >
-                            {showPassword ? (
-                              <EyeOff className="h-4 w-4" />
-                            ) : (
-                              <Eye className="h-4 w-4" />
-                            )}
-                          </button>
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
                 <Button
                   type="submit"
                   disabled={isPending}
@@ -222,7 +166,7 @@ const SignIn = () => {
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
                     <>
-                      Sign In
+                      Send OTP
                       <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </>
                   )}
@@ -237,12 +181,12 @@ const SignIn = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-center text-sm text-muted-foreground"
           >
-            Don't have an account?{" "}
+            Remember your password?{" "}
             <Link
-              href="/auth/sign-up"
+              href="/auth/sign-in"
               className="font-medium text-primary hover:underline underline-offset-4"
             >
-              Create account
+              Sign in
             </Link>
           </motion.div>
         </div>
@@ -251,4 +195,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default ForgotPassword;

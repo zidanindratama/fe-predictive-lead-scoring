@@ -29,6 +29,11 @@ axiosInstance.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
+    if (typeof window !== "undefined") {
+      config.headers["x-frontend-domain"] = window.location.origin;
+    }
+
     return config;
   },
   (error) => Promise.reject(error)
@@ -51,10 +56,18 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
+        const currentDomain =
+          typeof window !== "undefined" ? window.location.origin : "";
+
         const { data } = await axios.post(
           `${BASE_URL}/auth/refresh`,
           {},
-          { withCredentials: true }
+          {
+            withCredentials: true,
+            headers: {
+              "x-frontend-domain": currentDomain,
+            },
+          }
         );
 
         const newAccessToken = data.data.accessToken;
@@ -62,6 +75,10 @@ axiosInstance.interceptors.response.use(
         setAccessToken(newAccessToken);
 
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+
+        if (!originalRequest.headers["x-frontend-domain"] && currentDomain) {
+          originalRequest.headers["x-frontend-domain"] = currentDomain;
+        }
 
         return axiosInstance(originalRequest);
       } catch (refreshError) {
