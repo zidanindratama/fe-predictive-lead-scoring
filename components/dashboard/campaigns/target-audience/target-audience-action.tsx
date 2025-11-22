@@ -74,7 +74,6 @@ export const TargetAudienceAction = ({ data }: TargetAudienceActionProps) => {
           <DialogHeader className="mt-8 p-6 pb-4 border-b border-slate-100 dark:border-zinc-800">
             <div className="flex items-start justify-between">
               <div className="flex gap-4">
-                {/* 1. Avatar dengan aksen Biru */}
                 <Avatar className="h-14 w-14 border-2 border-white shadow-sm ring-1 ring-slate-100 rounded-xl">
                   <AvatarFallback className="bg-blue-50 text-blue-600 font-bold rounded-xl text-lg">
                     {getInitials(data.name)}
