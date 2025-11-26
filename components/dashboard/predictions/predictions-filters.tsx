@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/sheet";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Badge } from "@/components/ui/badge";
+import { DateTimePicker } from "@/components/ui/date-time-picker";
 
 export interface PredictionFilters {
   q?: string;
@@ -195,21 +196,22 @@ export function PredictionsFilters({
                     <label className="text-xs text-muted-foreground">
                       From Date
                     </label>
-                    <Input
-                      type="date"
-                      value={filters.dateFrom || ""}
-                      onChange={(e) => handleDateFromChange(e.target.value)}
-                      disabled={isLoading}
-                    />
+                    <DateTimePicker 
+                      value={filters.dateFrom ? new Date(filters.dateFrom) : null} 
+                      onChange={(date) => {
+                        handleDateFromChange(date ? date.toISOString() : "");
+                      }}
+                      disabled={isLoading} />
                   </div>
                   <div className="flex flex-col gap-1">
                     <label className="text-xs text-muted-foreground">
                       To Date
                     </label>
-                    <Input
-                      type="date"
-                      value={filters.dateTo || ""}
-                      onChange={(e) => handleDateToChange(e.target.value)}
+                    <DateTimePicker
+                      value={filters.dateTo ? new Date(filters.dateTo) : null}
+                      onChange={(date) => {
+                        handleDateToChange(date ? date.toISOString() : "");
+                      }}
                       disabled={isLoading}
                     />
                   </div>

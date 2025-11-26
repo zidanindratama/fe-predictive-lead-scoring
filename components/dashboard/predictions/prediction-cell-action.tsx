@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { MoreHorizontal, Eye, Trash } from "lucide-react";
 import { toast } from "sonner";
-// removed unused Link import
+import Link from "next/link";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";

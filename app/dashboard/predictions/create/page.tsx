@@ -1,11 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Loader2, Save, ArrowLeft } from "lucide-react";
+import { Loader2, Save, ArrowLeft, ChevronsUpDown } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -18,13 +18,6 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -32,6 +25,22 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useGetData } from "@/hooks/use-get-data";
 import { usePostData } from "@/hooks/use-post-data";
 import { getPredictionPermissions, UserRole } from "@/components/dashboard/predictions/prediction-auth";
+
+// ⬇️ NEW: Combobox (shadcn)
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
+
 
 interface Customer {
   id: string;
@@ -67,10 +76,7 @@ export default function CreatePredictionPage() {
     }
   }, [user, permissions, router]);
 
-  const { data: customers, isLoading: isLoadingCustomers } = useGetData<Customer[]>(
-    ["customers"],
-    "/customers"
-  );
+  const { data: customers, isLoading: isLoadingCustomers } = useGetData<Customer[]>(["customers"], "/customers");
 
   const form = useForm<CreatePredictionValues>({
     resolver: zodResolver(createPredictionSchema),
@@ -79,19 +85,16 @@ export default function CreatePredictionPage() {
     },
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { mutate: createPrediction, isPending: isCreating } = usePostData<any, CreatePredictionValues>(
     "/predictions/single",
     [["predictions"]],
     {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       onSuccess: (prediction: any) => {
         toast.success(
           `Prediction created! Probability: ${(prediction.probabilityYes * 100).toFixed(1)}%`
         );
         router.push("/dashboard/predictions");
       },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       onError: (error: any) => {
         toast.error(error?.response?.data?.message || "Failed to create prediction");
       },
@@ -105,87 +108,117 @@ export default function CreatePredictionPage() {
   };
 
   return (
-    <div className="flex-1 space-y-8 p-4 sm:p-8 max-w-3xl">
+    <div className="flex flex-col space-y-6 mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-4xl w-full">
       {/* Header */}
       <div className="flex items-center gap-4">
         <Button
-          variant="ghost"
+          variant="outline"
           size="icon"
           onClick={() => router.back()}
-          className="rounded-full"
+          className="h-9 w-9 rounded-xl border-slate-200 dark:border-zinc-800"
         >
           <ArrowLeft className="h-4 w-4" />
         </Button>
+
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Create Prediction</h1>
-          <p className="text-muted-foreground">
-            Trigger on-demand lead scoring for a specific customer
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+            Create Prediction
+          </h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            Trigger on-demand lead scoring for a specific customer.
           </p>
         </div>
       </div>
 
-      {!permissions.canCreate ? (
-        <Alert variant="destructive">
-          <AlertDescription>
-            You do not have permission to create predictions. Only ADMIN and STAFF members can create predictions.
-          </AlertDescription>
-        </Alert>
-      ) : (
-        <Card className="border-slate-200 dark:border-zinc-800">
+      {/* Content */}
+      {permissions.canCreate ? (
+        <Card className="border-slate-200 dark:border-zinc-800 shadow-sm rounded-2xl">
           <CardHeader>
-            <CardTitle>Select Customer</CardTitle>
-            <CardDescription>
-              Choose a customer to trigger real-time lead scoring
+            <CardTitle className="text-slate-900 dark:text-slate-50">
+              Select Customer
+            </CardTitle>
+            <CardDescription className="text-slate-500 dark:text-slate-400">
+              Choose a customer to trigger real-time lead scoring.
             </CardDescription>
+
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
+              The system will analyze the customer's profile and generate a predictive lead score.
+            </p>
           </CardHeader>
+
           <CardContent>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+
+                {/* Customer Combobox */}
                 <FormField
                   control={form.control}
                   name="customerId"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Customer</FormLabel>
-                      <FormDescription>
-                        The system will score this customer based on their profile data
+                    <FormItem className="flex flex-col">
+                      <FormLabel className="text-slate-700 dark:text-slate-200">Customer</FormLabel>
+                      <FormDescription className="text-slate-500 dark:text-slate-400">
+                        Search customer by name.
                       </FormDescription>
+
                       {isLoadingCustomers ? (
-                        <Skeleton className="h-10 w-full" />
+                        <Skeleton className="h-10 w-full rounded-xl" />
                       ) : (
-                        <Select value={field.value} onValueChange={field.onChange}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a customer..." />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {customers?.items?.map((customer) => (
-                              <SelectItem key={customer.id} value={customer.id}>
-                                <div className="flex items-center gap-2">
-                                  <span>{customer.name}</span>
-                                  {customer.age && (
-                                    <span className="text-xs text-muted-foreground">
-                                      ({customer.age}y)
-                                    </span>
-                                  )}
-                                  {customer.job && (
-                                    <span className="text-xs text-muted-foreground">
-                                      · {customer.job}
-                                    </span>
-                                  )}
-                                </div>
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                className="w-full justify-between rounded-xl"
+                              >
+                                {field.value
+                                  ? customers?.items?.find((c) => c.id === field.value)?.name
+                                  : "Select a customer..."}
+
+                                <ChevronsUpDown className="opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+
+                          <PopoverContent className="p-0 rounded-xl w-[var(--radix-popover-trigger-width)]" align="start">
+                            <Command>
+                              <CommandInput placeholder="Search customers..." />
+                              <CommandList>
+                                <CommandEmpty>No customer found.</CommandEmpty>
+                                <CommandGroup>
+                                  {customers?.items?.map((customer) => (
+                                    <CommandItem
+                                      key={customer.id}
+                                      onSelect={() => field.onChange(customer.id)}
+                                    >
+                                      <div className="flex flex-col">
+                                        <span>{customer.name}</span>
+                                        <span className="text-xs text-muted-foreground">
+                                          {customer.age ? `${customer.age}y · ` : ""}
+                                          {customer.job ?? ""}
+                                        </span>
+                                      </div>
+                                    </CommandItem>
+                                  ))}
+                                </CommandGroup>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
                       )}
+
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
-                <Button type="submit" disabled={isCreating}>
+                {/* Submit */}
+                <Button
+                  type="submit"
+                  disabled={isCreating}
+                  className="rounded-xl h-10 px-4"
+                >
                   {isCreating ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -197,13 +230,19 @@ export default function CreatePredictionPage() {
                       Create Prediction
                     </>
                   )}
-                </Button>  
-                                
+                </Button>
               </form>
             </Form>
           </CardContent>
         </Card>
+      ) : (
+        <Alert variant="destructive">
+          <AlertDescription>
+            You do not have permission to create predictions.
+          </AlertDescription>
+        </Alert>
       )}
     </div>
+
   );
 }
