@@ -124,7 +124,7 @@ export function PredictionDetailPage({ id }: PredictionDetailPageProps) {
   const probNoPercent = 100 - probYesPercent;
 
   return (
-    <div className="flex flex-col space-y-6 pb-14 w-full max-w-[900px] mx-auto animate-in fade-in">
+    <div className="flex flex-col space-y-6 pb-14 w-full max-w-[1100px] mx-auto animate-in fade-in">
       
       {/* BACK BUTTON */}
       <div className="flex items-center gap-3 mt-4">
