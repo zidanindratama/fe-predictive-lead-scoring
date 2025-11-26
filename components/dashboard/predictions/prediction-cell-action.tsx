@@ -30,7 +30,7 @@ import { useDeleteData } from "@/hooks/use-delete-data";
 import { useGetData } from "@/hooks/use-get-data";
 import { Prediction } from "./prediction-columns";
 import { getPredictionPermissions, UserRole } from "./prediction-auth";
-import { PredictionDetailSheet } from "./prediction-detail-sheet";
+import { PredictionDetailPage } from "./prediction-detail-page";
 
 interface AuthUser {
   role?: string;
@@ -113,12 +113,14 @@ export const PredictionCellAction = ({ data }: PredictionCellActionProps) => {
         <DropdownMenuContent align="end" className="w-40">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
-          <DropdownMenuItem
-            onClick={() => setDetailOpen(true)}
-            className="flex items-center font-medium text-blue-600 focus:text-blue-700 dark:text-blue-400 dark:focus:text-blue-300 cursor-pointer"
-          >
-            <Eye className="mr-2 h-4 w-4 text-blue-600" />
-            View
+          <DropdownMenuItem asChild>
+            <Link
+              href={`/dashboard/predictions/${data.id}`}
+              className="flex items-center font-medium text-blue-600 focus:text-blue-700 dark:text-blue-400 dark:focus:text-blue-300 cursor-pointer"
+            >
+              <Eye className="mr-2 h-4 w-4 text-blue-600" />
+              View
+            </Link>
           </DropdownMenuItem>
 
           {permissions.canDelete && (
@@ -135,11 +137,6 @@ export const PredictionCellAction = ({ data }: PredictionCellActionProps) => {
           )}
         </DropdownMenuContent>
       </DropdownMenu>
-      <PredictionDetailSheet
-        id={data.id}
-        isOpen={detailOpen}
-        onOpenChange={setDetailOpen}
-      />
     </>
   );
 };
