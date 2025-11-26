@@ -136,7 +136,7 @@ const HomeContent = () => {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">
-              {overviewData.totalCustomers.toLocaleString()}
+              {overviewData.totalCustomers.toLocaleString("en-US")}
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
               +20.1% from last month
@@ -153,7 +153,7 @@ const HomeContent = () => {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">
-              {overviewData.predictions.yes.toLocaleString()}
+              {overviewData.predictions.yes.toLocaleString("en-US")}
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
               +20.1% from last month
