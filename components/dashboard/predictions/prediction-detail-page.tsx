@@ -265,7 +265,7 @@ export function PredictionDetailPage({ id }: PredictionDetailPageProps) {
                           </FormLabel>
                           <Select value={field.value} onValueChange={field.onChange}>
                             <FormControl>
-                              <SelectTrigger>
+                              <SelectTrigger className="w-full">
                                 <SelectValue />
                               </SelectTrigger>
                             </FormControl>
