@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { MoreHorizontal, Eye, Trash } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
@@ -29,8 +29,6 @@ import {
 import { useDeleteData } from "@/hooks/use-delete-data";
 import { useGetData } from "@/hooks/use-get-data";
 import { Prediction } from "./prediction-columns";
-import { getPredictionPermissions, UserRole } from "./prediction-auth";
-import { PredictionDetailPage } from "./prediction-detail-page";
 
 interface AuthUser {
   role?: string;
@@ -42,13 +40,7 @@ interface PredictionCellActionProps {
 
 export const PredictionCellAction = ({ data }: PredictionCellActionProps) => {
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const [detailOpen, setDetailOpen] = useState(false);
   const { data: user } = useGetData<AuthUser>(["me"], "/auth/me");
-  
-  const permissions = useMemo(
-    () => getPredictionPermissions((user?.role as UserRole) || undefined),
-    [user?.role]
-  );
 
   const queryClient = useQueryClient();
 
@@ -123,18 +115,18 @@ export const PredictionCellAction = ({ data }: PredictionCellActionProps) => {
             </Link>
           </DropdownMenuItem>
 
-          {permissions.canDelete && (
-            <>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => setDeleteOpen(true)}
-                className="flex items-center font-medium text-red-600 focus:text-red-700 focus:bg-red-50 dark:focus:bg-red-950/50 cursor-pointer"
-              >
-                <Trash className="mr-2 h-4 w-4 text-red-600" />
-                Delete
-              </DropdownMenuItem>
-            </>
+          <DropdownMenuSeparator />
+
+          {user?.role === "ADMIN" && (
+            <DropdownMenuItem
+              onClick={() => setDeleteOpen(true)}
+              className="flex items-center font-medium text-red-600 focus:text-red-700 focus:bg-red-50 dark:focus:bg-red-950/50 cursor-pointer"
+            >
+              <Trash className="mr-2 h-4 w-4 text-red-600" />
+              Delete
+            </DropdownMenuItem>
           )}
+
         </DropdownMenuContent>
       </DropdownMenu>
     </>

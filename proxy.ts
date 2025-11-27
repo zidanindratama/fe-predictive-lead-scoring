@@ -6,6 +6,7 @@ const protectedRoutes: Record<string, string[]> = {
   "/dashboard/users": ["ADMIN"],
   "/dashboard/campaigns": ["ADMIN", "STAFF"],
   "/dashboard": ["ADMIN", "STAFF", "USER"],
+  "/dashboard/predictions/create": ["ADMIN", "STAFF"],
 };
 
 const authRoutes = ["/auth/sign-in", "/auth/sign-up"];
@@ -51,6 +52,7 @@ export function proxy(request: NextRequest) {
           return NextResponse.redirect(new URL("/unauthorized", request.url));
         }
       }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       return NextResponse.redirect(new URL("/auth/sign-in", request.url));
     }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState, useMemo } from "react";
+import { useCallback, useState } from "react";
 import { PaginationState, SortingState } from "@tanstack/react-table";
 import { useGetData } from "@/hooks/use-get-data";
 import { DataTable } from "../(global)/datatable/data-table";
@@ -12,7 +12,6 @@ import {
   PredictionsFilters,
   PredictionFilters,
 } from "./predictions-filters";
-import { getPredictionPermissions, UserRole } from "./prediction-auth";
 
 interface AuthUser {
   role?: string;
@@ -20,10 +19,6 @@ interface AuthUser {
 
 export default function PredictionDatatable() {
   const { data: user } = useGetData<AuthUser>(["me"], "/auth/me");
-  const permissions = useMemo(
-    () => getPredictionPermissions((user?.role as UserRole) || undefined),
-    [user?.role]
-  );
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -35,8 +30,8 @@ export default function PredictionDatatable() {
 
   const sortingMap: Record<string, string> = {
     timestamp: "timestamp",
-    prediction: "predictedClass",   // prediction column
-    probability: "probabilityYes",  // confidence column
+    prediction: "predictedClass",   
+    probability: "probabilityYes",  
   };
 
   const sortKey = sortingMap[sorting[0]?.id ?? ""];
@@ -88,13 +83,13 @@ export default function PredictionDatatable() {
           </div>
         </div>
 
-        {permissions.canCreate && (
+        {user?.role !== "USER" && (
           <Button asChild>
             <Link href="/dashboard/predictions/create">
               <Plus className="mr-2 h-4 w-4" />
               Create Prediction
             </Link>
-          </Button>
+          </Button>  
         )}
       </div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,7 +38,6 @@ import { Progress } from "@/components/ui/progress";
 
 import { useGetData } from "@/hooks/use-get-data";
 import { usePatchData } from "@/hooks/use-patch-data";
-import { getPredictionPermissions, UserRole } from "@/components/dashboard/predictions/prediction-auth";
 
 interface PredictionDetail {
   id: string;
@@ -75,13 +74,9 @@ interface PredictionDetailPageProps {
 export function PredictionDetailPage({ id }: PredictionDetailPageProps) {
   const router = useRouter();
 
-  const { data: user } = useGetData<AuthUser>(["me"], "/auth/me");
-  const permissions = useMemo(
-    () => getPredictionPermissions((user?.role as UserRole) || undefined),
-    [user?.role]
-  );
-
   const { data: prediction, isLoading } = useGetData<PredictionDetail>( ["predictions", id], `/predictions/${id}`, {} );
+
+  const { data: user } = useGetData<AuthUser>(["me"], "/auth/me");
 
   const form = useForm<PredictionUpdateValues>({
     resolver: zodResolver(predictionUpdateSchema),
@@ -120,13 +115,13 @@ export function PredictionDetailPage({ id }: PredictionDetailPageProps) {
     updatePrediction({ data });
   };
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const probYesPercent = Math.round((form.watch("probabilityYes") ?? 0) * 100);
   const probNoPercent = 100 - probYesPercent;
 
   return (
     <div className="flex flex-col space-y-6 pb-14 w-full max-w-[1100px] mx-auto animate-in fade-in">
-      
-      {/* BACK BUTTON */}
+
       <div className="flex items-center gap-3 mt-4">
         <Button
           variant="outline"
@@ -162,7 +157,6 @@ export function PredictionDetailPage({ id }: PredictionDetailPageProps) {
         </Alert>
       ) : (
         <>
-          {/* Current Prediction */}
           <Card className="border-slate-200 dark:border-zinc-800">
             <CardHeader className="pb-3">
               <CardTitle className="text-base">Current Prediction</CardTitle>
@@ -220,7 +214,6 @@ export function PredictionDetailPage({ id }: PredictionDetailPageProps) {
             </CardContent>
           </Card>
 
-          {/* Customer Info */}
           <Card className="border-slate-200 dark:border-zinc-800">
             <CardHeader className="pb-3">
               <CardTitle className="text-base">Customer Context</CardTitle>
@@ -251,8 +244,7 @@ export function PredictionDetailPage({ id }: PredictionDetailPageProps) {
             </CardContent>
           </Card>
 
-          {/* Manual Correction */}
-          {permissions.canUpdate ? (
+          {user?.role !== "USER" ? (
             <Card className="border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/20">
               <CardHeader>
                 <CardTitle className="text-base">Manual Correction</CardTitle>

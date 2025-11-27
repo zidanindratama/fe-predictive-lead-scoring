@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { Search, X, Filter } from "lucide-react";
+import { X, Filter } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,7 +41,6 @@ export function PredictionsFilters({
 }: PredictionsFiltersProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  // Probability range - stored as 0-100 for UI, converted to 0-1 for API
   const probMin = (filters.probYesMin ?? 0) * 100;
   const probMax = (filters.probYesMax ?? 1) * 100;
 
@@ -127,7 +126,6 @@ export function PredictionsFilters({
             </SheetHeader>
 
             <div className="space-y-6 py-6 mx-4">
-              {/* Prediction Class Filter */}
               <div className="space-y-3">
                 <Label className="text-sm font-semibold">Prediction Result</Label>
                 <ToggleGroup
@@ -148,7 +146,6 @@ export function PredictionsFilters({
                 </ToggleGroup>
               </div>
 
-              {/* Probability Range Slider */}
               <div className="space-y-4">
                 <div>
                   <Label className="text-sm font-semibold">
@@ -188,7 +185,6 @@ export function PredictionsFilters({
                 </div>
               </div>
 
-              {/* Date Range Filter */}
               <div className="space-y-3">
                 <Label className="text-sm font-semibold">Date Range</Label>
                 <div className="space-y-2">
@@ -197,7 +193,7 @@ export function PredictionsFilters({
                       From Date
                     </label>
                     <DateTimePicker 
-                      value={filters.dateFrom ? new Date(filters.dateFrom) : null} 
+                      value={filters.dateFrom ? new Date(filters.dateFrom) : undefined} 
                       onChange={(date) => {
                         handleDateFromChange(date ? date.toISOString() : "");
                       }}
@@ -208,7 +204,7 @@ export function PredictionsFilters({
                       To Date
                     </label>
                     <DateTimePicker
-                      value={filters.dateTo ? new Date(filters.dateTo) : null}
+                      value={filters.dateTo ? new Date(filters.dateTo) : undefined}
                       onChange={(date) => {
                         handleDateToChange(date ? date.toISOString() : "");
                       }}
@@ -218,7 +214,6 @@ export function PredictionsFilters({
                 </div>
               </div>
 
-              {/* Source Filter */}
               <div className="space-y-3">
                 <Label className="text-sm font-semibold">Source</Label>
                 <p className="text-xs text-muted-foreground">
@@ -232,7 +227,6 @@ export function PredictionsFilters({
                 />
               </div>
 
-              {/* Reset Button */}
               {hasActiveFilters && (
                 <Button
                   variant="outline"
@@ -249,7 +243,6 @@ export function PredictionsFilters({
         </Sheet>
       </div>
 
-      {/* Active Filters Display */}
       {hasActiveFilters && (
         <div className="flex flex-wrap gap-2">
           {filters.q && (
