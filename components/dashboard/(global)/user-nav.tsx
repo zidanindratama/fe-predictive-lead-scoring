@@ -139,22 +139,24 @@ export function UserNav({
         <DropdownMenuSeparator className="bg-white/10" />
         <DropdownMenuGroup>
           <DropdownMenuItem
-            className="rounded-lg focus:bg-white/10 focus:text-white cursor-pointer p-2.5"
-            asChild
+            onClick={() => router.push("/dashboard/my-account")}
+            className="group flex items-center gap-2 p-2 text-muted-foreground hover:text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-950/30 rounded-lg cursor-pointer transition-colors mt-1"
           >
-            <Link href={"/dashboard/my-account"}>
-              <User className="mr-2 h-4 w-4" />
-              <span>Account</span>
-            </Link>
+            <div className="p-1.5 rounded-md bg-orange-100/50 dark:bg-orange-900/20 group-hover:bg-orange-200/50 dark:group-hover:bg-orange-900/40 transition-colors">
+              <User className="h-4 w-4 text-orange-600 dark:text-orange-400" />
+            </div>
+            <span className="font-medium">Account</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator className="bg-white/10" />
         <DropdownMenuItem
           onClick={handleLogout}
-          className="rounded-lg focus:bg-red-500/10 focus:text-red-400 text-red-400 cursor-pointer p-2.5"
+          className="group flex items-center gap-2 p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg cursor-pointer transition-colors"
         >
-          <LogOut className="mr-2 h-4 w-4" />
-          <span>Log out</span>
+          <div className="p-1.5 rounded-md bg-red-100/50 dark:bg-red-900/20 group-hover:bg-red-200/50 dark:group-hover:bg-red-900/40 transition-colors">
+            <LogOut className="h-4 w-4 text-red-600" />
+          </div>
+          <span className="font-medium">Log out</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

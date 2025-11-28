@@ -3,7 +3,6 @@ import {
   Users,
   UserCog,
   Megaphone,
-  Settings,
   BrainCircuit,
   FileText,
   LifeBuoy,
@@ -76,18 +75,13 @@ export const navItems = [
 
 export const navSecondary = [
   {
-    title: "Documentation",
-    url: "/docs",
+    title: "Terms of Service",
+    url: "/terms-of-service",
     icon: FileText,
   },
   {
     title: "Support",
-    url: "/support",
+    url: "/contact",
     icon: LifeBuoy,
-  },
-  {
-    title: "Settings",
-    url: "/dashboard/settings",
-    icon: Settings,
   },
 ];

@@ -2,14 +2,16 @@
 
 import { useState } from "react";
 import { PaginationState, SortingState } from "@tanstack/react-table";
-import { Shield, UserCog, Users as UsersIcon } from "lucide-react";
+import { Plus, BrainCircuit, CheckCircle2, XCircle } from "lucide-react";
+import Link from "next/link";
 
 import { useGetData } from "@/hooks/use-get-data";
 import { DataTable } from "../(global)/datatable/data-table";
-import { User, userColumns } from "./user-columns";
+import { Prediction, predictionColumns } from "./prediction-columns";
+import { Button } from "@/components/ui/button";
 import { DataTableToolbar } from "../(global)/datatable/data-table-toolbar";
 
-export default function UserDatatable() {
+export default function PredictionDatatable() {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -17,44 +19,52 @@ export default function UserDatatable() {
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const [search, setSearch] = useState("");
-  const [roleFilter, setRoleFilter] = useState<string | undefined>(undefined);
+  const [predictedClassFilter, setPredictedClassFilter] = useState<
+    string | undefined
+  >(undefined);
 
   const queryParams = {
     page: pagination.pageIndex + 1,
     limit: pagination.pageSize,
     q: search,
-    role: roleFilter,
+    predictedClass: predictedClassFilter,
     sortBy: sorting[0]?.id,
     sortDir: sorting[0]?.desc ? "desc" : "asc",
   };
 
-  const { data, isLoading } = useGetData<{ items: User[]; meta: any }>(
-    ["users", queryParams as any],
-    "/users",
+  const { data, isLoading } = useGetData<{ items: Prediction[]; meta: any }>(
+    ["predictions", queryParams as any],
+    "/predictions",
     queryParams
   );
 
   const resetFilters = () => {
     setSearch("");
-    setRoleFilter(undefined);
+    setPredictedClassFilter(undefined);
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
   };
 
   return (
     <div className="flex flex-col space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="flex items-center justify-between space-y-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 space-y-2">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">
-            Users Management
+          <h2 className="text-2xl font-bold tracking-tight flex items-center gap-2">
+            Predictions
           </h2>
           <p className="text-muted-foreground">
-            Manage your system users, roles, and access permissions.
+            History of AI predictions for customer conversion.
           </p>
         </div>
+        <Button asChild>
+          <Link href="/dashboard/predictions/create">
+            <Plus className="mr-2 h-4 w-4" />
+            New Prediction
+          </Link>
+        </Button>
       </div>
 
       <DataTableToolbar
-        searchKey="name or email"
+        searchKey="customer name"
         searchValue={search}
         onSearchChange={(val) => {
           setSearch(val);
@@ -62,22 +72,21 @@ export default function UserDatatable() {
         }}
         filters={[
           {
-            key: "role",
-            title: "Role",
+            key: "predictedClass",
+            title: "Prediction Class",
             options: [
-              { label: "Admin", value: "ADMIN", icon: Shield },
-              { label: "Staff", value: "STAFF", icon: UserCog },
-              { label: "User", value: "USER", icon: UsersIcon },
+              { label: "YES (Conversion)", value: "YES", icon: CheckCircle2 },
+              { label: "NO (No Conversion)", value: "NO", icon: XCircle },
             ],
           },
         ]}
         filterValues={{
-          role: roleFilter,
+          predictedClass: predictedClassFilter,
         }}
         onFilterChange={(key, val) => {
-          if (key === "role") {
+          if (key === "predictedClass") {
             const singleVal = Array.isArray(val) ? val[0] : val;
-            setRoleFilter(singleVal as string | undefined);
+            setPredictedClassFilter(singleVal as string | undefined);
           }
           setPagination((prev) => ({ ...prev, pageIndex: 0 }));
         }}
@@ -85,7 +94,7 @@ export default function UserDatatable() {
       />
 
       <DataTable
-        columns={userColumns}
+        columns={predictionColumns}
         data={data?.items ?? []}
         pageCount={data?.meta?.pages ?? 0}
         pagination={pagination}

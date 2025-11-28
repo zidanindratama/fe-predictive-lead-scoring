@@ -9,6 +9,7 @@ import { useGetData } from "@/hooks/use-get-data";
 import { DataTable } from "../(global)/datatable/data-table";
 import { Campaign, campaignColumns } from "./campaign-columns";
 import { Button } from "@/components/ui/button";
+import { DataTableToolbar } from "../(global)/datatable/data-table-toolbar";
 
 export default function CampaignDatatable() {
   const [pagination, setPagination] = useState<PaginationState>({
@@ -16,6 +17,7 @@ export default function CampaignDatatable() {
     pageSize: 10,
   });
   const [sorting, setSorting] = useState<SortingState>([]);
+
   const [search, setSearch] = useState("");
 
   const queryParams = {
@@ -31,6 +33,11 @@ export default function CampaignDatatable() {
     "/campaigns",
     queryParams
   );
+
+  const resetFilters = () => {
+    setSearch("");
+    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+  };
 
   return (
     <div className="flex flex-col space-y-8">
@@ -49,6 +56,17 @@ export default function CampaignDatatable() {
         </Button>
       </div>
 
+      <DataTableToolbar
+        searchKey="campaign name"
+        searchValue={search}
+        onSearchChange={(val) => {
+          setSearch(val);
+          setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+        }}
+        filters={[]}
+        onReset={resetFilters}
+      />
+
       <DataTable
         columns={campaignColumns}
         data={data?.items ?? []}
@@ -57,9 +75,6 @@ export default function CampaignDatatable() {
         onPaginationChange={setPagination}
         sorting={sorting}
         onSortingChange={setSorting}
-        searchKey="name"
-        searchValue={search}
-        onSearchValueChange={setSearch}
         isLoading={isLoading}
       />
     </div>

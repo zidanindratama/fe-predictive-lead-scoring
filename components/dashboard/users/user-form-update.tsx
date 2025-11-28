@@ -90,7 +90,6 @@ export function UserFormUpdate({ userId }: UserFormUpdateProps) {
         avatarUrl: user?.avatarUrl || PLACEHOLDER_IMAGE,
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const { mutate: uploadImage, isPending: isUploading } = useUploadData<{

@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGetData } from "@/hooks/use-get-data";
 import { Customer, targetAudienceColumns } from "./target-audience-columns";
 import { DataTable } from "../../(global)/datatable/data-table";
+import { DataTableToolbar } from "../../(global)/datatable/data-table-toolbar";
 
 interface TargetAudienceTableProps {
   criteria: any;
@@ -19,6 +20,7 @@ export function TargetAudienceTable({ criteria }: TargetAudienceTableProps) {
     pageSize: 10,
   });
   const [sorting, setSorting] = useState<SortingState>([]);
+
   const [search, setSearch] = useState("");
 
   const filters = useMemo(() => {
@@ -61,20 +63,36 @@ export function TargetAudienceTable({ criteria }: TargetAudienceTableProps) {
     queryParams
   );
 
+  const resetFilters = () => {
+    setSearch("");
+    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+  };
+
   return (
-    <Card className="border-slate-200 dark:border-zinc-800 shadow-none">
-      <CardHeader className="pb-2">
+    <Card className="border-slate-200 dark:border-zinc-800 shadow-none h-full flex flex-col">
+      <CardHeader className="pb-2 border-b bg-slate-50/50 dark:bg-zinc-900/50">
         <CardTitle className="text-base font-medium flex items-center gap-2">
           <Users className="h-4 w-4 text-blue-600" />
           Target Audience Preview
-          {data?.meta?.totalItems !== undefined && (
-            <span className="ml-auto text-sm font-normal text-muted-foreground">
-              {data.meta.totalItems} matching customers
+          {data?.meta?.total !== undefined && (
+            <span className="ml-auto text-sm font-normal text-muted-foreground bg-white dark:bg-zinc-800 px-2 py-0.5 rounded-full border shadow-sm">
+              {data.meta.total} matching customers
             </span>
           )}
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-4 space-y-4 flex-1">
+        <DataTableToolbar
+          searchKey="customer name"
+          searchValue={search}
+          onSearchChange={(val) => {
+            setSearch(val);
+            setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+          }}
+          filters={[]}
+          onReset={resetFilters}
+        />
+
         <DataTable
           columns={targetAudienceColumns}
           data={data?.items ?? []}
@@ -83,9 +101,6 @@ export function TargetAudienceTable({ criteria }: TargetAudienceTableProps) {
           onPaginationChange={setPagination}
           sorting={sorting}
           onSortingChange={setSorting}
-          searchKey="name"
-          searchValue={search}
-          onSearchValueChange={setSearch}
           isLoading={isLoading}
         />
       </CardContent>

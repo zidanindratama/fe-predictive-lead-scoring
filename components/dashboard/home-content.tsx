@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import {
   Card,
   CardContent,
@@ -9,13 +10,15 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Users,
   Target,
   PieChart as PieIcon,
   Download,
-  TrendingUp,
   Sparkles,
+  Briefcase,
+  Zap,
 } from "lucide-react";
 import {
   BarChart,
@@ -32,53 +35,15 @@ import {
   AreaChart,
   Area,
 } from "recharts";
+import Link from "next/link";
 
-const overviewData = {
-  totalCustomers: 1240,
-  predictions: { yes: 850, no: 390 },
-  campaigns: 8,
-};
-
-const monthlyData = [
-  { bucket: "Jan", yes: 45, no: 30 },
-  { bucket: "Feb", yes: 52, no: 28 },
-  { bucket: "Mar", yes: 48, no: 35 },
-  { bucket: "Apr", yes: 61, no: 20 },
-  { bucket: "May", yes: 55, no: 25 },
-  { bucket: "Jun", yes: 67, no: 15 },
-  { bucket: "Jul", yes: 72, no: 18 },
-  { bucket: "Aug", yes: 65, no: 22 },
-];
-
-const weeklyData = [
-  { bucket: "Mon", yes: 12, no: 5 },
-  { bucket: "Tue", yes: 18, no: 8 },
-  { bucket: "Wed", yes: 15, no: 6 },
-  { bucket: "Thu", yes: 22, no: 4 },
-  { bucket: "Fri", yes: 25, no: 7 },
-  { bucket: "Sat", yes: 10, no: 12 },
-  { bucket: "Sun", yes: 8, no: 10 },
-];
-
-const jobData = [
-  { job: "Admin", yes: 85, no: 0 },
-  { job: "Tech", yes: 75, no: 0 },
-  { job: "Mgmt", yes: 60, no: 0 },
-  { job: "Blue-collar", yes: 40, no: 0 },
-  { job: "Services", yes: 35, no: 0 },
-  { job: "Retired", yes: 20, no: 0 },
-];
-
-const pieData = [
-  { name: "High Probability", value: 68, color: "#2563eb" },
-  { name: "Low Probability", value: 32, color: "#94a3b8" },
-];
+import { useGetData } from "@/hooks/use-get-data";
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-3 rounded-xl shadow-xl">
-        <p className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-2">
+        <p className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-2 capitalize">
           {label}
         </p>
         {payload.map((entry: any, index: number) => (
@@ -101,7 +66,53 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-const HomeContent = () => {
+export default function HomeContent() {
+  const [trendGroup, setTrendGroup] = useState<"month" | "week">("month");
+
+  const { data: overview, isLoading: loadingOverview } = useGetData<any>(
+    ["analytics", "overview"],
+    "/analytics/overview"
+  );
+
+  const { data: trendData, isLoading: loadingTrend } = useGetData<any[]>(
+    ["analytics", "trend", trendGroup],
+    "/analytics/trend",
+    { groupBy: trendGroup }
+  );
+
+  const { data: jobData, isLoading: loadingJob } = useGetData<any[]>(
+    ["analytics", "by-job"],
+    "/analytics/by-job"
+  );
+
+  const isLoading = loadingOverview || loadingTrend || loadingJob;
+
+  const topJob = useMemo(() => {
+    if (!jobData || jobData.length === 0) return null;
+
+    return jobData.reduce((prev, current) => {
+      return prev.yes > current.yes ? prev : current;
+    });
+  }, [jobData]);
+
+  if (isLoading) {
+    return <DashboardSkeleton />;
+  }
+
+  const total = overview?.totalCustomers || 0;
+  const yes = overview?.predictions?.yes || 0;
+  const no = overview?.predictions?.no || 0;
+  const campaigns = overview?.campaigns || 0;
+
+  const conversionRate = total > 0 ? ((yes / total) * 100).toFixed(1) : "0.0";
+
+  const leadsPerCampaign = campaigns > 0 ? Math.round(yes / campaigns) : 0;
+
+  const pieData = [
+    { name: "High Probability", value: yes, color: "#2563eb" },
+    { name: "Low Probability", value: no, color: "#94a3b8" },
+  ];
+
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 bg-white dark:bg-zinc-950 p-6 rounded-3xl transition-colors">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -120,8 +131,13 @@ const HomeContent = () => {
           >
             <Download className="mr-2 h-4 w-4" /> Export Report
           </Button>
-          <Button className="bg-slate-900 dark:bg-slate-50 text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-200 font-semibold shadow-lg transition-all hover:scale-105">
-            <Sparkles className="mr-2 h-4 w-4" /> New Prediction
+          <Button
+            asChild
+            className="bg-slate-900 dark:bg-slate-50 text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-200 font-semibold shadow-lg transition-all hover:scale-105"
+          >
+            <Link href="/dashboard/predictions/create">
+              <Sparkles className="mr-2 h-4 w-4" /> New Prediction
+            </Link>
           </Button>
         </div>
       </div>
@@ -135,11 +151,9 @@ const HomeContent = () => {
             <Users className="h-4 w-4 text-blue-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">
-              {overviewData.totalCustomers.toLocaleString()}
-            </div>
+            <div className="text-3xl font-bold">{total.toLocaleString()}</div>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              +20.1% from last month
+              All extracted customers
             </p>
           </CardContent>
         </Card>
@@ -152,11 +166,9 @@ const HomeContent = () => {
             <Target className="h-4 w-4 text-emerald-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">
-              {overviewData.predictions.yes.toLocaleString()}
-            </div>
+            <div className="text-3xl font-bold">{yes.toLocaleString()}</div>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              +20.1% from last month
+              Predicted to convert (YES)
             </p>
           </CardContent>
         </Card>
@@ -164,20 +176,16 @@ const HomeContent = () => {
         <Card className="border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-slate-900 dark:text-slate-100 hover:border-slate-300 dark:hover:border-zinc-700 transition-colors shadow-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-slate-500 dark:text-slate-400">
-              Conversion Rate
+              Top Segment
             </CardTitle>
-            <TrendingUp className="h-4 w-4 text-purple-500" />
+            <Briefcase className="h-4 w-4 text-purple-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">
-              {(
-                (overviewData.predictions.yes / overviewData.totalCustomers) *
-                100
-              ).toFixed(1)}
-              %
+            <div className="text-3xl font-bold capitalize truncate">
+              {topJob ? topJob.job.replace(".", "") : "N/A"}
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              +20.1% from last month
+              {topJob ? `${topJob.yes} leads generated` : "Waiting for data"}
             </p>
           </CardContent>
         </Card>
@@ -190,9 +198,9 @@ const HomeContent = () => {
             <PieIcon className="h-4 w-4 text-orange-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">{overviewData.campaigns}</div>
+            <div className="text-3xl font-bold">{campaigns}</div>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              +20.1% from last month
+              Marketing initiatives
             </p>
           </CardContent>
         </Card>
@@ -209,17 +217,22 @@ const HomeContent = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="pl-0">
-            <Tabs defaultValue="monthly" className="space-y-4">
+            <Tabs
+              defaultValue="month"
+              value={trendGroup}
+              onValueChange={(v) => setTrendGroup(v as "month" | "week")}
+              className="space-y-4"
+            >
               <div className="flex items-center justify-between px-6">
                 <TabsList className="bg-slate-100 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 p-1">
                   <TabsTrigger
-                    value="monthly"
+                    value="month"
                     className="text-xs data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-950 data-[state=active]:text-slate-900 dark:data-[state=active]:text-slate-100 data-[state=active]:shadow-sm text-slate-500 dark:text-slate-400"
                   >
                     Monthly
                   </TabsTrigger>
                   <TabsTrigger
-                    value="weekly"
+                    value="week"
                     className="text-xs data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-950 data-[state=active]:text-slate-900 dark:data-[state=active]:text-slate-100 data-[state=active]:shadow-sm text-slate-500 dark:text-slate-400"
                   >
                     Weekly
@@ -227,10 +240,10 @@ const HomeContent = () => {
                 </TabsList>
               </div>
 
-              <TabsContent value="monthly" className="space-y-4 px-2">
+              <TabsContent value={trendGroup} className="space-y-4 px-2">
                 <div className="h-[350px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={monthlyData} barGap={8}>
+                    <BarChart data={trendData || []} barGap={8}>
                       <CartesianGrid
                         strokeDasharray="3 3"
                         stroke="#94a3b8"
@@ -281,65 +294,6 @@ const HomeContent = () => {
                   </ResponsiveContainer>
                 </div>
               </TabsContent>
-
-              <TabsContent value="weekly" className="space-y-4 px-2">
-                <div className="h-[350px] w-full">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={weeklyData}>
-                      <defs>
-                        <linearGradient
-                          id="colorYesWeekly"
-                          x1="0"
-                          y1="0"
-                          x2="0"
-                          y2="1"
-                        >
-                          <stop
-                            offset="5%"
-                            stopColor="#2563eb"
-                            stopOpacity={0.8}
-                          />
-                          <stop
-                            offset="95%"
-                            stopColor="#2563eb"
-                            stopOpacity={0}
-                          />
-                        </linearGradient>
-                      </defs>
-                      <CartesianGrid
-                        strokeDasharray="3 3"
-                        stroke="#94a3b8"
-                        opacity={0.2}
-                        vertical={false}
-                      />
-                      <XAxis
-                        dataKey="bucket"
-                        stroke="#94a3b8"
-                        fontSize={12}
-                        tickLine={false}
-                        axisLine={false}
-                        dy={10}
-                      />
-                      <YAxis
-                        stroke="#94a3b8"
-                        fontSize={12}
-                        tickLine={false}
-                        axisLine={false}
-                        dx={-10}
-                      />
-                      <Tooltip content={<CustomTooltip />} />
-                      <Area
-                        type="monotone"
-                        dataKey="yes"
-                        stroke="#2563eb"
-                        strokeWidth={3}
-                        fillOpacity={1}
-                        fill="url(#colorYesWeekly)"
-                      />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                </div>
-              </TabsContent>
             </Tabs>
           </CardContent>
         </Card>
@@ -381,7 +335,7 @@ const HomeContent = () => {
                 </ResponsiveContainer>
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                   <span className="text-4xl font-bold text-slate-900 dark:text-slate-100">
-                    68%
+                    {conversionRate}%
                   </span>
                   <span className="text-xs text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wider">
                     Success Rate
@@ -394,23 +348,23 @@ const HomeContent = () => {
           <Card className="border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm transition-colors">
             <CardHeader>
               <CardTitle className="text-slate-900 dark:text-slate-100">
-                Top Segment
+                Efficiency
               </CardTitle>
               <CardDescription className="text-slate-500 dark:text-slate-400">
-                Highest conversion group
+                Avg. leads per campaign
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-4 p-2">
-                <div className="p-3 rounded-xl bg-blue-600/10 text-blue-500 border border-blue-600/20">
-                  <Users className="h-6 w-6" />
+                <div className="p-3 rounded-xl bg-orange-600/10 text-orange-500 border border-orange-600/20">
+                  <Zap className="h-6 w-6" />
                 </div>
                 <div>
                   <p className="text-lg font-bold text-slate-900 dark:text-slate-100">
-                    Admin. & Tech
+                    ~{leadsPerCampaign} Leads
                   </p>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
-                    160+ Leads generated
+                    High impact results
                   </p>
                 </div>
               </div>
@@ -418,6 +372,7 @@ const HomeContent = () => {
           </Card>
         </div>
       </div>
+
       <Card className="border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm transition-colors">
         <CardHeader>
           <CardTitle className="text-slate-900 dark:text-slate-100">
@@ -431,7 +386,7 @@ const HomeContent = () => {
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
-                data={jobData}
+                data={jobData || []}
                 margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                 barSize={24}
               >
@@ -448,6 +403,13 @@ const HomeContent = () => {
                   tickLine={false}
                   axisLine={false}
                   dy={10}
+                  tickFormatter={(val) =>
+                    val.length > 8
+                      ? val.slice(0, 8).charAt(0).toUpperCase() +
+                        val.slice(1, 8) +
+                        "..."
+                      : val.charAt(0).toUpperCase() + val.slice(1)
+                  }
                 />
                 <YAxis
                   stroke="#94a3b8"
@@ -473,6 +435,37 @@ const HomeContent = () => {
       </Card>
     </div>
   );
-};
+}
 
-export default HomeContent;
+function DashboardSkeleton() {
+  return (
+    <div className="space-y-8 p-6">
+      <div className="flex justify-between items-center">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-4 w-64" />
+        </div>
+        <div className="flex gap-2">
+          <Skeleton className="h-10 w-32" />
+          <Skeleton className="h-10 w-32" />
+        </div>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {[...Array(4)].map((_, i) => (
+          <Skeleton key={i} className="h-32 rounded-xl" />
+        ))}
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-7">
+        <Skeleton className="col-span-7 lg:col-span-5 h-[400px] rounded-xl" />
+        <div className="col-span-7 lg:col-span-2 flex flex-col gap-4">
+          <Skeleton className="flex-1 rounded-xl" />
+          <Skeleton className="h-32 rounded-xl" />
+        </div>
+      </div>
+
+      <Skeleton className="h-[350px] w-full rounded-xl" />
+    </div>
+  );
+}
