@@ -13,7 +13,7 @@ import {
   Target,
   TrendingUp,
   CheckCircle2,
-  AlertCircle,
+  XCircle,
   Briefcase,
   Users,
   GraduationCap,
@@ -22,13 +22,15 @@ import {
   Code,
   PieChart,
   ListFilter,
+  BarChart3,
+  Rocket,
 } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import Link from "next/link";
 import { TargetAudienceTable } from "@/components/dashboard/campaigns/target-audience/target-audience-table";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { EDUCATION_OPTIONS, JOB_OPTIONS, MARITAL_OPTIONS } from "./_data/const";
+import { Loader2 } from "lucide-react";
 
 interface CampaignDetailProps {
   id: string;
@@ -114,7 +116,10 @@ export function CampaignDetail({ id }: CampaignDetailProps) {
             className="h-10 bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/20 rounded-full flex-1 md:flex-none"
           >
             {isRunning ? (
-              <>Running...</>
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Running...
+              </>
             ) : (
               <>
                 <Play className="mr-2 h-4 w-4 fill-current" />
@@ -126,10 +131,10 @@ export function CampaignDetail({ id }: CampaignDetailProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-        <Card className="md:col-span-4 border-l-4 border-l-purple-500 shadow-sm rounded-xl">
+        <Card className="md:col-span-4 border-l-4 border-l-blue-500 shadow-sm rounded-xl">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-purple-500" />
+              <TrendingUp className="h-4 w-4 text-blue-500" />
               Conversion Rate
             </CardTitle>
           </CardHeader>
@@ -142,7 +147,7 @@ export function CampaignDetail({ id }: CampaignDetailProps) {
             </div>
             <div className="mt-4 h-2 w-full bg-slate-100 dark:bg-zinc-800 rounded-full overflow-hidden">
               <div
-                className="h-full bg-purple-500 rounded-full transition-all duration-1000"
+                className="h-full bg-blue-500 rounded-full transition-all duration-1000"
                 style={{ width: `${rateValue}%` }}
               />
             </div>
@@ -184,7 +189,9 @@ export function CampaignDetail({ id }: CampaignDetailProps) {
             <div className="mt-4 flex h-2 w-full overflow-hidden rounded-full">
               <div
                 className="bg-green-500 h-full transition-all duration-1000"
-                style={{ width: total > 0 ? `${(yes / total) * 100}%` : "0%" }}
+                style={{
+                  width: total > 0 ? `${(yes / total) * 100}%` : "0%",
+                }}
               />
               <div
                 className="bg-slate-200 dark:bg-zinc-700 h-full transition-all duration-1000"
@@ -214,7 +221,7 @@ export function CampaignDetail({ id }: CampaignDetailProps) {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-w-0">
         <div className="lg:col-span-4 flex flex-col gap-6 order-2 lg:order-1">
-          <Card className="border-slate-200 dark:border-zinc-800 shadow-sm rounded-xl overflow-hidden">
+          <Card className="border-slate-200 dark:border-zinc-800 shadow-sm rounded-xl overflow-hidden h-full">
             <CardHeader className="bg-slate-50/50 dark:bg-zinc-900/50 border-b pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-base font-semibold flex items-center gap-2">
@@ -304,23 +311,35 @@ export function CampaignDetail({ id }: CampaignDetailProps) {
 
         <div className="lg:col-span-8 order-1 lg:order-2 min-w-0">
           {total === 0 ? (
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8 bg-slate-50/50 dark:bg-zinc-900/10">
-              <div className="bg-white dark:bg-zinc-800 p-4 rounded-full shadow-sm mb-4">
-                <AlertCircle className="h-8 w-8 text-slate-300" />
+            <Card className="h-full border-dashed border-2 border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-900/20 shadow-none flex flex-col items-center justify-center p-12 text-center">
+              <div className="p-4 bg-white dark:bg-zinc-900 rounded-full shadow-sm mb-4 border border-slate-100 dark:border-zinc-800">
+                <BarChart3 className="h-8 w-8 text-blue-300 dark:text-blue-600" />
               </div>
-              <h3 className="text-lg font-medium">No Simulation Data</h3>
-              <p className="text-sm text-muted-foreground max-w-xs mt-2 mb-6">
-                Run the simulation to generate predictions for this criteria.
+              <h3 className="text-lg font-semibold text-foreground">
+                Ready to Simulate
+              </h3>
+              <p className="text-sm text-muted-foreground max-w-sm mt-2 mb-8">
+                This campaign hasn't been run yet. Start the simulation to
+                process customer data and generate predictive scores.
               </p>
               <Button
                 onClick={() => runCampaign({})}
                 disabled={isRunning}
-                variant="outline"
-                className="rounded-xl"
+                className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-8"
               >
-                Start Simulation
+                {isRunning ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <Rocket className="mr-2 h-4 w-4 fill-current" />
+                    Start Simulation
+                  </>
+                )}
               </Button>
-            </div>
+            </Card>
           ) : (
             <TargetAudienceTable criteria={campaign.criteria} />
           )}
