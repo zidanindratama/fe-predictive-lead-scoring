@@ -12,6 +12,7 @@ import {
   LayoutDashboard,
   Loader2,
   ChevronRight,
+  User,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -204,13 +205,13 @@ export const Navbar = () => {
                 </DropdownMenuItem>
 
                 <DropdownMenuItem
-                  onClick={() => router.push("/dashboard/settings")}
+                  onClick={() => router.push("/dashboard/my-account")}
                   className="group flex items-center gap-2 p-2 text-muted-foreground hover:text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-950/30 rounded-lg cursor-pointer transition-colors mt-1"
                 >
                   <div className="p-1.5 rounded-md bg-orange-100/50 dark:bg-orange-900/20 group-hover:bg-orange-200/50 dark:group-hover:bg-orange-900/40 transition-colors">
-                    <Settings className="h-4 w-4 text-orange-600 dark:text-orange-400" />
+                    <User className="h-4 w-4 text-orange-600 dark:text-orange-400" />
                   </div>
-                  <span className="font-medium">Settings</span>
+                  <span className="font-medium">Account</span>
                 </DropdownMenuItem>
 
                 <DropdownMenuSeparator className="bg-border/50 my-1" />
