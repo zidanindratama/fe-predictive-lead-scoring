@@ -21,7 +21,6 @@ import {
 } from "@/components/ui/form";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 
 import { useGetData } from "@/hooks/use-get-data";
 import { usePostData } from "@/hooks/use-post-data";
@@ -50,10 +49,6 @@ interface Customer {
   job?: string;
 }
 
-interface AuthUser {
-  role?: string;
-}
-
 const createPredictionSchema = z.object({
   customerId: z.string().min(1, "Please select a customer"),
 });
@@ -64,18 +59,20 @@ type CreatePredictionValues = z.infer<typeof createPredictionSchema>;
 export function PredictionCreateForm() {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
-  const debouncedSearch = useDebounce(searchTerm, 200000);
+  const debouncedSearch = useDebounce(searchTerm, 1000);
 
-  const { data: user } = useGetData<AuthUser>(["me"], "/auth/me");
+  const queryParams = {
+    q: debouncedSearch,
+  };
 
   const { data: customers, isLoading: isLoadingCustomers } = useGetData<
     { items: Customer[] }
   >(
-    ["customers", debouncedSearch],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ["customers", queryParams] as any,
     "/customers",
     {
-      q: debouncedSearch,
-      limit: 100,
+      queryParams,
     }
   );
 
@@ -111,14 +108,6 @@ export function PredictionCreateForm() {
       customerId: data.customerId,
     });
   };
-
-  if (user?.role !== "ADMIN") {
-    return (
-      <Alert variant="destructive">
-        <AlertDescription>You do not have permission to create predictions.</AlertDescription>
-      </Alert>
-    );
-  }
 
   return (
     <Card className="border-slate-200 dark:border-zinc-800 shadow-sm rounded-2xl">
