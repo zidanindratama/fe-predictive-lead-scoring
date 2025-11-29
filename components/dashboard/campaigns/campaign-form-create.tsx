@@ -23,7 +23,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
@@ -36,7 +35,6 @@ import {
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -69,6 +67,7 @@ export function CampaignFormCreate() {
   );
 
   const onSubmit = (data: CampaignFormValues) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const newCriteria: any = {};
 
     if (data.ageMin !== undefined || data.ageMax !== undefined) {
@@ -173,8 +172,8 @@ export function CampaignFormCreate() {
               <Alert className="bg-blue-50 text-blue-900 border-blue-200 dark:bg-blue-950 dark:text-blue-100 dark:border-blue-800">
                 <Info className="h-4 w-4" />
                 <AlertTitle>Targeting Tip</AlertTitle>
-                <AlertDescription className="text-xs mt-1">
-                  Combining "Student" job with "Single" status usually yields
+                <AlertDescription className="text-xs mt-1"> 
+                  Combining &quot;Student&quot; job with &quot;Single&quot; status usually yields
                   higher success rates.
                 </AlertDescription>
               </Alert>
