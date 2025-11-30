@@ -24,13 +24,15 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-import { useDeleteData } from "@/hooks/use-delete-data"; 
+import { useDeleteData } from "@/hooks/use-delete-data";
 import { useGetData } from "@/hooks/use-get-data";
 import { Customer } from "./_schema/schema";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-interface AuthUser { role?: string; }
+interface AuthUser {
+  role?: string;
+}
 
 export const CustomerCellAction = ({ data }: { data: Customer }) => {
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -67,14 +69,18 @@ export const CustomerCellAction = ({ data }: { data: Customer }) => {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete <span className="font-bold text-foreground">{data.name}</span>.
+              This will permanently delete{" "}
+              <span className="font-bold text-foreground">{data.name}</span>.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
             <AlertDialogAction
               disabled={isDeleting}
-              onClick={(e) => { e.preventDefault(); onConfirmDelete(); }}
+              onClick={(e) => {
+                e.preventDefault();
+                onConfirmDelete();
+              }}
               className="bg-red-600 hover:bg-red-700"
             >
               {isDeleting ? "Deleting..." : "Delete"}
@@ -99,10 +105,10 @@ export const CustomerCellAction = ({ data }: { data: Customer }) => {
               className="flex items-center font-medium text-blue-600 focus:text-blue-700 dark:text-blue-500 dark:focus:text-blue-400 cursor-pointer"
             >
               <Edit className="mr-2 h-4 w-4 text-blue-600" />
-              View Result
+              View Customer
             </Link>
           </DropdownMenuItem>
-          
+
           {user?.role !== "USER" && (
             <DropdownMenuItem asChild>
               <Link
@@ -112,11 +118,11 @@ export const CustomerCellAction = ({ data }: { data: Customer }) => {
                 <Edit className="mr-2 h-4 w-4 text-amber-600" />
                 Edit Customer
               </Link>
-            </DropdownMenuItem>  
+            </DropdownMenuItem>
           )}
 
           <DropdownMenuSeparator />
-          
+
           {user?.role === "ADMIN" && (
             <DropdownMenuItem
               onClick={() => setDeleteOpen(true)}

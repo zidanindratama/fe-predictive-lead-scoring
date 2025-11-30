@@ -2,15 +2,15 @@
 
 import { useState } from "react";
 import { PaginationState, SortingState } from "@tanstack/react-table";
-import { 
-  Plus, 
-  Download, 
-  Briefcase, 
-  Heart, 
+import {
+  Plus,
+  Download,
+  Briefcase,
+  Heart,
   Upload,
   Calendar,
   GraduationCap,
-  Hash
+  Hash,
 } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
@@ -33,7 +33,7 @@ import { DateTimePicker } from "@/components/ui/date-time-picker";
 
 import { useGetData } from "@/hooks/use-get-data";
 import { useExportData } from "@/hooks/use-export-data";
-import { useDebounce } from "@/hooks/use-debounce"; 
+import { useDebounce } from "@/hooks/use-debounce";
 import { DataTable } from "../(global)/datatable/data-table";
 import { DataTableToolbar } from "../(global)/datatable/data-table-toolbar";
 
@@ -46,7 +46,7 @@ interface AuthUser {
 }
 
 const jobFilterOptions = JOB_OPTIONS.map((opt) => ({
-  label: opt.label, 
+  label: opt.label,
   value: opt.value,
   icon: Briefcase,
 }));
@@ -57,7 +57,7 @@ const maritalFilterOptions = MARITAL_OPTIONS.map((opt) => ({
   icon: Heart,
 }));
 
-  const educationFilterOptions = EDUCATION_OPTIONS.map((opt) => ({
+const educationFilterOptions = EDUCATION_OPTIONS.map((opt) => ({
   label: opt.label,
   value: opt.value,
   icon: GraduationCap,
@@ -74,11 +74,15 @@ export default function CustomerDatatable() {
 
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 500);
-  
+
   const [jobFilter, setJobFilter] = useState<string | undefined>(undefined);
-  const [maritalFilter, setMaritalFilter] = useState<string | undefined>(undefined);
-  const [educationFilter, setEducationFilter] = useState<string | undefined>(undefined);
-  
+  const [maritalFilter, setMaritalFilter] = useState<string | undefined>(
+    undefined
+  );
+  const [educationFilter, setEducationFilter] = useState<string | undefined>(
+    undefined
+  );
+
   const [ageMin, setAgeMin] = useState<number | undefined>(undefined);
   const [ageMax, setAgeMax] = useState<number | undefined>(undefined);
 
@@ -96,8 +100,8 @@ export default function CustomerDatatable() {
     education: educationFilter,
     ageMin: ageMin,
     ageMax: ageMax,
-    from: dateFrom ? format(new Date(dateFrom), 'yyyy-MM-dd') : undefined,
-    to: dateTo ? format(new Date(dateTo), 'yyyy-MM-dd') : undefined,
+    from: dateFrom ? format(new Date(dateFrom), "yyyy-MM-dd") : undefined,
+    to: dateTo ? format(new Date(dateTo), "yyyy-MM-dd") : undefined,
     sortBy: sortKey || "createdAt",
     sortDir: sorting[0]?.desc ? "desc" : "asc",
   };
@@ -142,78 +146,80 @@ export default function CustomerDatatable() {
 
   return (
     <div className="flex flex-col space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      
       <div className="flex flex-col sm:flex-row justify-between gap-4 space-y-2">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Customers</h2>
-          <p className="text-muted-foreground">Manage your banking customers and lead data.</p>
+          <p className="text-muted-foreground">
+            Manage your banking customers and lead data.
+          </p>
         </div>
 
-        <div className="flex items-center gap-2">
-           {user?.role !== "USER" && (
+        <div className="flex flex-col md:flex-row md:items-center gap-2">
+          {user?.role !== "USER" && (
             <>
-               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+              <div className="flex md:items-center gap-2">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
                     <Button variant="outline" disabled={isExporting}>
-                        <Download className="mr-2 h-4 w-4" /> Export
+                      <Download className="mr-2 h-4 w-4" /> Export
                     </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
                     <DropdownMenuItem onClick={() => handleExport("csv")}>
-                        Export as CSV
+                      Export as CSV
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleExport("xlsx")}>
-                        Export as XLSX
+                      Export as XLSX
                     </DropdownMenuItem>
-                </DropdownMenuContent>
-               </DropdownMenu>
+                  </DropdownMenuContent>
+                </DropdownMenu>
 
-               <Button asChild variant="outline">
-                <Link href="/dashboard/customers/import">
-                  <Upload className="mr-2 h-4 w-4" />
-                  Import
-                </Link>
-              </Button>
-                
-               <Button asChild>
+                <Button asChild variant="outline">
+                  <Link href="/dashboard/customers/import">
+                    <Upload className="mr-2 h-4 w-4" />
+                    Import
+                  </Link>
+                </Button>
+              </div>
+
+              <Button className="w-fit" asChild>
                 <Link href="/dashboard/customers/create">
                   <Plus className="mr-2 h-4 w-4" />
                   New Customer
                 </Link>
               </Button>
             </>
-           )}
+          )}
         </div>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4 p-4 bg-slate-50 dark:bg-zinc-900/50 rounded-xl border border-slate-200 dark:border-zinc-800 items-end sm:items-center">
-         <div className="flex flex-col gap-1.5 w-full">
-            <span className="text-xs font-medium text-muted-foreground flex items-center gap-1">
-              <Calendar className="h-3 w-3" /> Date From
-            </span>
-            <DateTimePicker 
-              value={dateFrom ? new Date(dateFrom) : undefined}
-              onChange={(d) => setDateFrom(d?.toISOString())}
-              disabled={isLoading}
-            />
-         </div>
-         <div className="flex flex-col gap-1.5 w-full">
-            <span className="text-xs font-medium text-muted-foreground flex items-center gap-1">
-              <Calendar className="h-3 w-3" /> Date To
-            </span>
-            <DateTimePicker 
-              value={dateTo ? new Date(dateTo) : undefined}
-              onChange={(d) => setDateTo(d?.toISOString())}
-              disabled={isLoading}
-            />
-         </div>
+        <div className="flex flex-col gap-1.5 w-full">
+          <span className="text-xs font-medium text-muted-foreground flex items-center gap-1">
+            <Calendar className="h-3 w-3" /> Date From
+          </span>
+          <DateTimePicker
+            value={dateFrom ? new Date(dateFrom) : undefined}
+            onChange={(d) => setDateFrom(d?.toISOString())}
+            disabled={isLoading}
+          />
+        </div>
+        <div className="flex flex-col gap-1.5 w-full">
+          <span className="text-xs font-medium text-muted-foreground flex items-center gap-1">
+            <Calendar className="h-3 w-3" /> Date To
+          </span>
+          <DateTimePicker
+            value={dateTo ? new Date(dateTo) : undefined}
+            onChange={(d) => setDateTo(d?.toISOString())}
+            disabled={isLoading}
+          />
+        </div>
       </div>
 
       <div className="flex flex-col gap-4">
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-          
           <DataTableToolbar
-            searchKey="customer name" 
+            searchKey="customer name"
             searchValue={search}
             onSearchChange={(val) => {
               setSearch(val);
@@ -244,8 +250,10 @@ export default function CustomerDatatable() {
             onFilterChange={(key, val) => {
               const singleVal = Array.isArray(val) ? val[0] : val;
               if (key === "job") setJobFilter(singleVal as string | undefined);
-              if (key === "marital") setMaritalFilter(singleVal as string | undefined);
-              if (key === "education") setEducationFilter(singleVal as string | undefined);
+              if (key === "marital")
+                setMaritalFilter(singleVal as string | undefined);
+              if (key === "education")
+                setEducationFilter(singleVal as string | undefined);
               setPagination((prev) => ({ ...prev, pageIndex: 0 }));
             }}
             onReset={resetFilters}
@@ -253,12 +261,16 @@ export default function CustomerDatatable() {
 
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" className="border-dashed h-10">
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-10 border-dashed rounded-xl"
+              >
                 <Hash className="mr-2 h-4 w-4" />
                 Age Range
                 {isAgeFiltered && (
                   <span className="ml-2 rounded bg-slate-100 px-1.5 py-0.5 text-xs font-medium dark:bg-slate-800">
-                    {(ageMin ?? "0")}-{ageMax ?? "∞"}
+                    {ageMin ?? "0"}-{ageMax ?? "∞"}
                   </span>
                 )}
               </Button>
@@ -280,7 +292,9 @@ export default function CustomerDatatable() {
                       placeholder="18"
                       value={ageMin ?? ""}
                       onChange={(e) => {
-                        setAgeMin(e.target.value ? Number(e.target.value) : undefined);
+                        setAgeMin(
+                          e.target.value ? Number(e.target.value) : undefined
+                        );
                         setPagination((prev) => ({ ...prev, pageIndex: 0 }));
                       }}
                     />
@@ -293,7 +307,9 @@ export default function CustomerDatatable() {
                       placeholder="100"
                       value={ageMax ?? ""}
                       onChange={(e) => {
-                        setAgeMax(e.target.value ? Number(e.target.value) : undefined);
+                        setAgeMax(
+                          e.target.value ? Number(e.target.value) : undefined
+                        );
                         setPagination((prev) => ({ ...prev, pageIndex: 0 }));
                       }}
                     />
@@ -302,7 +318,6 @@ export default function CustomerDatatable() {
               </div>
             </PopoverContent>
           </Popover>
-
         </div>
 
         <DataTable
