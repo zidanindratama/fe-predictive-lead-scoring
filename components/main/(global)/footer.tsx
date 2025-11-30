@@ -4,6 +4,8 @@ export const Footer = () => {
   const mainLinks = [
     { name: "About", href: "/about-us" },
     { name: "Workflow", href: "/workflow" },
+    { name: "Features", href: "/features" },
+    { name: "Tour", href: "/tour" },
     { name: "Contact", href: "/contact" },
   ];
 
