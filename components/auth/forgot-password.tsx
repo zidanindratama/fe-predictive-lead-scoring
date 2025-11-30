@@ -43,7 +43,6 @@ const ForgotPassword = () => {
     {
       onSuccess: (_, variables) => {
         toast.success("OTP sent to your email!");
-        // Redirect ke reset password sambil membawa email agar user tidak perlu ketik ulang
         router.push(
           `/auth/reset-password?email=${encodeURIComponent(variables.email)}`
         );
