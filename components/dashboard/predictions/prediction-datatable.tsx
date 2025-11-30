@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { PaginationState, SortingState } from "@tanstack/react-table";
-import { Plus, BrainCircuit, CheckCircle2, XCircle } from "lucide-react";
+import { Plus, CheckCircle2, XCircle } from "lucide-react";
 import Link from "next/link";
 
 import { useGetData } from "@/hooks/use-get-data";
@@ -32,7 +32,9 @@ export default function PredictionDatatable() {
     sortDir: sorting[0]?.desc ? "desc" : "asc",
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, isLoading } = useGetData<{ items: Prediction[]; meta: any }>(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ["predictions", queryParams as any],
     "/predictions",
     queryParams

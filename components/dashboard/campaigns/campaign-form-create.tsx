@@ -23,7 +23,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
@@ -33,13 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
 import MultipleSelector from "@/components/ui/multi-select";
@@ -69,6 +62,7 @@ export function CampaignFormCreate() {
   );
 
   const onSubmit = (data: CampaignFormValues) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const newCriteria: any = {};
 
     if (data.ageMin !== undefined || data.ageMax !== undefined) {
@@ -174,8 +168,8 @@ export function CampaignFormCreate() {
                 <Info className="h-4 w-4" />
                 <AlertTitle>Targeting Tip</AlertTitle>
                 <AlertDescription className="text-xs mt-1">
-                  Combining "Student" job with "Single" status usually yields
-                  higher success rates.
+                  Combining &quot;Student&quot; job with &quot;Single&quot;
+                  status usually yields higher success rates.
                 </AlertDescription>
               </Alert>
             </div>
@@ -332,7 +326,7 @@ export function CampaignFormCreate() {
                           onValueChange={field.onChange}
                         >
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger className="w-full">
                               <SelectValue placeholder="Select..." />
                             </SelectTrigger>
                           </FormControl>
@@ -357,7 +351,7 @@ export function CampaignFormCreate() {
                           onValueChange={field.onChange}
                         >
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger className="w-full">
                               <SelectValue placeholder="Select..." />
                             </SelectTrigger>
                           </FormControl>
@@ -382,7 +376,7 @@ export function CampaignFormCreate() {
                           onValueChange={field.onChange}
                         >
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger className="w-full">
                               <SelectValue placeholder="Select..." />
                             </SelectTrigger>
                           </FormControl>

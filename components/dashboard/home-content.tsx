@@ -126,14 +126,8 @@ export default function HomeContent() {
         </div>
         <div className="flex items-center gap-3">
           <Button
-            variant="outline"
-            className="hidden sm:flex border-slate-200 dark:border-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-900 text-slate-900 dark:text-slate-200"
-          >
-            <Download className="mr-2 h-4 w-4" /> Export Report
-          </Button>
-          <Button
             asChild
-            className="bg-slate-900 dark:bg-slate-50 text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-200 font-semibold shadow-lg transition-all hover:scale-105"
+            className="font-semibold shadow-lg transition-all hover:scale-105"
           >
             <Link href="/dashboard/predictions/create">
               <Sparkles className="mr-2 h-4 w-4" /> New Prediction
