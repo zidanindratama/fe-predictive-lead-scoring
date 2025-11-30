@@ -2,6 +2,13 @@ import { Badge } from "@/components/ui/badge";
 import { CTASection } from "@/components/main/(global)/cta-section";
 import { TourInteractive } from "@/components/main/tour/tour-interactive";
 import { Transformation } from "@/components/main/tour/transformation";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Interactive Product Tour",
+  description:
+    "Experience SmartBank in action. Walk through our AI prediction workflow, from data import to actionable insights, without signing up.",
+};
 
 export default function TourPage() {
   return (
