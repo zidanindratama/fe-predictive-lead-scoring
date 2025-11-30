@@ -388,7 +388,7 @@ export function CampaignFormUpdate({ campaignId }: CampaignFormUpdateProps) {
                           onValueChange={field.onChange}
                         >
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger className="w-full">
                               <SelectValue placeholder="Select..." />
                             </SelectTrigger>
                           </FormControl>
@@ -413,7 +413,7 @@ export function CampaignFormUpdate({ campaignId }: CampaignFormUpdateProps) {
                           onValueChange={field.onChange}
                         >
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger className="w-full">
                               <SelectValue placeholder="Select..." />
                             </SelectTrigger>
                           </FormControl>
@@ -438,7 +438,7 @@ export function CampaignFormUpdate({ campaignId }: CampaignFormUpdateProps) {
                           onValueChange={field.onChange}
                         >
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger className="w-full">
                               <SelectValue placeholder="Select..." />
                             </SelectTrigger>
                           </FormControl>
