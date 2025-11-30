@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, X, Check, AlertCircle } from "lucide-react";
+import { Sparkles, AlertCircle, Check } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"; // Import Shadcn
 import { cn } from "@/lib/utils";
 
 const spreadsheetRows = Array.from({ length: 8 }).map((_, i) => ({
@@ -135,8 +136,8 @@ export const Transformation = () => {
           </div>
         </div>
 
-        <div className="relative min-h-[500px] w-full bg-background rounded-2xl border shadow-2xl overflow-hidden transition-all duration-500">
-          <div className="h-10 bg-secondary/50 border-b flex items-center px-4 gap-2">
+        <div className="relative h-[600px] w-full bg-background rounded-2xl border shadow-2xl overflow-hidden transition-all duration-500 flex flex-col">
+          <div className="h-10 bg-secondary/50 border-b flex items-center px-4 gap-2 shrink-0">
             <div className="flex gap-1.5">
               <div className="w-3 h-3 rounded-full bg-red-400/50" />
               <div className="w-3 h-3 rounded-full bg-yellow-400/50" />
@@ -149,7 +150,7 @@ export const Transformation = () => {
             </div>
           </div>
 
-          <div className="p-6 h-full relative">
+          <div className="flex-1 relative overflow-hidden bg-slate-50 dark:bg-zinc-950/50">
             <AnimatePresence mode="wait">
               {!isSmart ? (
                 <motion.div
@@ -158,41 +159,45 @@ export const Transformation = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 1.05, filter: "blur(10px)" }}
                   transition={{ duration: 0.4 }}
-                  className="w-full h-full flex flex-col"
+                  className="w-full h-full flex flex-col p-4 md:p-8"
                 >
-                  <div className="flex items-center gap-2 mb-4 text-red-500 bg-red-50 dark:bg-red-900/20 p-2 rounded-lg w-fit mx-auto">
+                  <div className="flex items-center justify-center gap-2 mb-4 text-red-500 bg-red-50 dark:bg-red-900/20 p-2 rounded-lg w-fit mx-auto shadow-sm">
                     <AlertCircle className="w-4 h-4" />
                     <span className="text-xs font-bold uppercase tracking-wider">
                       Chaos Mode
                     </span>
                   </div>
 
-                  <div className="border rounded-lg overflow-hidden bg-white dark:bg-zinc-900 text-left text-sm font-mono">
-                    <div className="grid grid-cols-4 bg-slate-100 dark:bg-zinc-800 p-2 font-bold border-b">
-                      <div>Name</div>
-                      <div>Job</div>
-                      <div>Balance</div>
-                      <div>Likelihood?</div>
-                    </div>
-                    {spreadsheetRows.map((row) => (
-                      <div
-                        key={row.id}
-                        className="grid grid-cols-4 p-3 border-b last:border-0 hover:bg-slate-50 dark:hover:bg-zinc-800/50"
-                      >
-                        <div className="truncate">{row.name}</div>
-                        <div className="truncate text-muted-foreground">
-                          {row.job}
-                        </div>
-                        <div className="truncate text-muted-foreground">
-                          {row.balance}
-                        </div>
-                        <div className="text-red-500 dark:text-red-400">
-                          {row.status}
-                        </div>
+                  <ScrollArea className="flex-1 w-full border rounded-lg bg-white dark:bg-zinc-900 shadow-sm">
+                    <div className="min-w-[600px]">
+                      <div className="grid grid-cols-4 bg-slate-100 dark:bg-zinc-800 p-3 font-bold text-sm border-b sticky top-0 z-10">
+                        <div>Name</div>
+                        <div>Job</div>
+                        <div>Balance</div>
+                        <div>Likelihood?</div>
                       </div>
-                    ))}
-                  </div>
-                  <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-background/80 pointer-events-none" />
+                      <div className="text-sm font-mono">
+                        {spreadsheetRows.map((row) => (
+                          <div
+                            key={row.id}
+                            className="grid grid-cols-4 p-3 border-b last:border-0 hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-colors"
+                          >
+                            <div className="truncate pr-2">{row.name}</div>
+                            <div className="truncate text-muted-foreground pr-2">
+                              {row.job}
+                            </div>
+                            <div className="truncate text-muted-foreground pr-2">
+                              {row.balance}
+                            </div>
+                            <div className="text-red-500 dark:text-red-400 font-medium">
+                              {row.status}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <ScrollBar orientation="horizontal" />
+                  </ScrollArea>
                 </motion.div>
               ) : (
                 <motion.div
@@ -201,62 +206,66 @@ export const Transformation = () => {
                   animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.4 }}
-                  className="w-full h-full flex flex-col items-center"
+                  className="w-full h-full flex flex-col items-center p-4 md:p-8"
                 >
-                  <div className="flex items-center gap-2 mb-8 text-primary bg-primary/10 p-2 rounded-lg w-fit">
+                  <div className="flex items-center gap-2 mb-8 text-primary bg-primary/10 p-2 rounded-lg w-fit shadow-sm">
                     <Sparkles className="w-4 h-4" />
                     <span className="text-xs font-bold uppercase tracking-wider">
                       Clarity Mode
                     </span>
                   </div>
 
-                  <div className="grid gap-4 w-full max-w-2xl text-left">
-                    {smartBankRows.map((row, i) => (
+                  <ScrollArea className="w-full max-w-2xl h-full pr-4">
+                    <div className="grid gap-4 pb-16">
+                      {smartBankRows.map((row, i) => (
+                        <motion.div
+                          key={row.id}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: i * 0.1 }}
+                          className="group flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 md:p-5 rounded-xl border bg-white dark:bg-zinc-900 shadow-sm hover:border-primary/50 hover:shadow-md transition-all gap-4"
+                        >
+                          <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary text-lg shrink-0">
+                              {row.name.charAt(0)}
+                            </div>
+                            <div>
+                              <h4 className="font-bold text-base md:text-lg">
+                                {row.name}
+                              </h4>
+                              <p className="text-xs md:text-sm text-muted-foreground">
+                                {row.reason}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center justify-between w-full sm:w-auto gap-6 pl-14 sm:pl-0">
+                            <div className="text-left sm:text-right">
+                              <div className="text-[10px] md:text-xs text-muted-foreground uppercase tracking-wider">
+                                Probability
+                              </div>
+                              <div className="font-bold text-lg md:text-xl text-primary">
+                                {row.score}%
+                              </div>
+                            </div>
+                            <Badge className="bg-green-500 hover:bg-green-600 text-sm py-1 px-3">
+                              <Check className="w-3 h-3 mr-1" /> {row.status}
+                            </Badge>
+                          </div>
+                        </motion.div>
+                      ))}
+
                       <motion.div
-                        key={row.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.1 }}
-                        className="group flex items-center justify-between p-4 rounded-xl border bg-card hover:border-primary/50 hover:shadow-md transition-all"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.5 }}
+                        className="text-center mt-4 text-sm text-muted-foreground bg-slate-100 dark:bg-zinc-800/50 py-2 rounded-lg"
                       >
-                        <div className="flex items-center gap-4">
-                          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">
-                            {row.name.charAt(0)}
-                          </div>
-                          <div>
-                            <h4 className="font-bold">{row.name}</h4>
-                            <p className="text-xs text-muted-foreground">
-                              {row.reason}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-6">
-                          <div className="text-right">
-                            <div className="text-xs text-muted-foreground uppercase">
-                              Probability
-                            </div>
-                            <div className="font-bold text-lg text-primary">
-                              {row.score}%
-                            </div>
-                          </div>
-                          <Badge className="bg-green-500 hover:bg-green-600">
-                            <Check className="w-3 h-3 mr-1" /> {row.status}
-                          </Badge>
-                        </div>
+                        + 4,320 other low-priority leads automatically filtered
+                        out.
                       </motion.div>
-                    ))}
-
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.5 }}
-                      className="text-center mt-4 text-sm text-muted-foreground"
-                    >
-                      + 4,320 other low-priority leads automatically filtered
-                      out.
-                    </motion.div>
-                  </div>
+                    </div>
+                  </ScrollArea>
                 </motion.div>
               )}
             </AnimatePresence>
