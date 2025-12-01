@@ -64,6 +64,8 @@ import {
   YES_NO_OPTIONS,
   CONTACT_OPTIONS,
   POUTCOME_OPTIONS,
+  MONTH_OPTIONS,
+  DAY_OPTIONS,
 } from "./_data/const";
 
 interface CustomerFormUpdateProps {
@@ -121,8 +123,8 @@ export function CustomerFormUpdate({ id }: CustomerFormUpdateProps) {
       housing: initialData.housing || "no",
       loan: initialData.loan || "no",
       contact: initialData.contact || "cellular",
-      month: initialData.month || "jan",
-      day_of_week: initialData.day_of_week || "mon",
+      month: initialData.month || "",
+      day_of_week: initialData.day_of_week || "",
       duration: initialData.duration || 0,
       campaign: initialData.campaign || 1,
       pdays: initialData.pdays || 999,
@@ -515,9 +517,16 @@ export function CustomerFormUpdate({ id }: CustomerFormUpdateProps) {
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>Month</FormLabel>
-                              <FormControl>
-                                <Input placeholder="e.g. may, jun" {...field} />
-                              </FormControl>
+                              <Select onValueChange={field.onChange} value={field.value || ""}>
+                                <FormControl>
+                                  <SelectTrigger className="w-full"><SelectValue placeholder="Select month" /></SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {MONTH_OPTIONS.map((opt) => (
+                                    <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
                               <FormMessage />
                             </FormItem>
                           )}
@@ -528,9 +537,16 @@ export function CustomerFormUpdate({ id }: CustomerFormUpdateProps) {
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>Day</FormLabel>
-                              <FormControl>
-                                <Input placeholder="e.g. mon, tue" {...field} />
-                              </FormControl>
+                              <Select onValueChange={field.onChange} value={field.value || ""}>
+                                <FormControl>
+                                  <SelectTrigger className="w-full"><SelectValue placeholder="Select day" /></SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {DAY_OPTIONS.map((opt) => (
+                                    <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
                               <FormMessage />
                             </FormItem>
                           )}
@@ -610,7 +626,7 @@ export function CustomerFormUpdate({ id }: CustomerFormUpdateProps) {
                             </FormItem>
                           )}
                         />
-                        <div className="grid grid-cols-2 gap-4 col-span-1 md:col-span-2">
+                        <div className="grid grid-cols-1 gap-4 col-span-1 md:col-span-2">
                           <FormField
                             control={form.control}
                             name="poutcome"
