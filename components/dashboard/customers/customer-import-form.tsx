@@ -9,6 +9,7 @@ import {
   Info,
   FileText,
   XCircle,
+  Download,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -34,14 +35,12 @@ export function CustomerImportForm() {
     "/customers/import",
     [["customers"]],
     {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       onSuccess: (data: any) => {
         const count = data?.imported || "multiple";
         toast.success(`Successfully imported ${count} customers`);
         router.push("/dashboard/customers");
         setErrorReport(null);
       },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       onError: (error: any) => {
         const responseData = error.response?.data;
         let details: string[] = [];
@@ -107,6 +106,15 @@ export function CustomerImportForm() {
     uploadFile(formData);
   };
 
+  const handleDownloadSample = () => {
+    const link = document.createElement("a");
+    link.href = "/sample_customer.csv";
+    link.setAttribute("download", "sample_customer.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="max-w-5xl mx-auto space-y-6 pb-10">
       <div className="flex flex-col md:flex-row md:items-center justify-end gap-4">
@@ -163,6 +171,14 @@ export function CustomerImportForm() {
               </p>
             </AlertDescription>
           </Alert>
+
+          <Button
+            variant="outline"
+            className="w-full border-dashed border-blue-300 bg-blue-50/50 hover:bg-blue-100 hover:border-blue-400 text-blue-700 dark:bg-blue-950/20 dark:border-blue-800 dark:text-blue-300 dark:hover:bg-blue-900/40"
+            onClick={handleDownloadSample}
+          >
+            <Download className="mr-2 h-4 w-4" /> Download Sample CSV
+          </Button>
         </div>
 
         <div className="md:col-span-2 space-y-4">
