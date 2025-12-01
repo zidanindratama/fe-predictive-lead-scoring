@@ -93,8 +93,9 @@ export const SystemArchitecture = () => {
               Predictive ML
             </h3>
             <p className="text-zinc-400 mb-4 text-sm">
-              Hosted on HuggingFace. Receives formatted customer data, runs
-              classification models, and returns probability scores (YES/NO).
+              Utilizing the Best Overall Model. Receives formatted customer
+              data, runs classification models, and returns probability scores
+              (YES/NO).
             </p>
             <div className="flex gap-2 flex-wrap">
               <span className="px-2 py-1 rounded bg-purple-500/10 text-purple-400 text-xs border border-purple-500/20">

@@ -23,6 +23,21 @@ export const getAccessToken = () => {
   return Cookies.get("accessToken");
 };
 
+let isRefreshing = false;
+let failedQueue: any[] = [];
+
+const processQueue = (error: any, token: string | null = null) => {
+  failedQueue.forEach((prom) => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token);
+    }
+  });
+
+  failedQueue = [];
+};
+
 axiosInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = Cookies.get("accessToken");
@@ -53,7 +68,23 @@ axiosInstance.interceptors.response.use(
         return Promise.reject(error);
       }
 
+      if (isRefreshing) {
+        return new Promise(function (resolve, reject) {
+          failedQueue.push({ resolve, reject });
+        })
+          .then((token) => {
+            if (originalRequest.headers) {
+              originalRequest.headers.Authorization = "Bearer " + token;
+            }
+            return axiosInstance(originalRequest);
+          })
+          .catch((err) => {
+            return Promise.reject(err);
+          });
+      }
+
       originalRequest._retry = true;
+      isRefreshing = true;
 
       try {
         const currentDomain =
@@ -74,6 +105,11 @@ axiosInstance.interceptors.response.use(
 
         setAccessToken(newAccessToken);
 
+        axiosInstance.defaults.headers.common["Authorization"] =
+          "Bearer " + newAccessToken;
+
+        processQueue(null, newAccessToken);
+
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
         if (!originalRequest.headers["x-frontend-domain"] && currentDomain) {
@@ -82,6 +118,7 @@ axiosInstance.interceptors.response.use(
 
         return axiosInstance(originalRequest);
       } catch (refreshError) {
+        processQueue(refreshError, null);
         setAccessToken(null);
 
         if (
@@ -92,6 +129,8 @@ axiosInstance.interceptors.response.use(
         }
 
         return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
       }
     }
 

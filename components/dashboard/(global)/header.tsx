@@ -2,16 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  Bell,
-  Search,
-  PanelLeftOpen,
-  HelpCircle,
-  Command,
-  ChevronRight,
-} from "lucide-react";
+import { PanelLeftOpen, HelpCircle, Command, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -237,30 +229,15 @@ export function Header({ isCollapsed, setIsCollapsed }: HeaderProps) {
       </div>
 
       <div className="flex items-center gap-2 md:gap-4">
-        <div className="relative hidden md:flex items-center group">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
-          <Input
-            type="search"
-            placeholder="Search analytics..."
-            className="w-48 lg:w-72 h-10 rounded-full bg-secondary/30 pl-10 border-transparent focus:bg-background focus:border-primary/20 focus:ring-2 focus:ring-primary/10 transition-all"
-          />
-        </div>
-
         <Button
           variant="ghost"
           size="icon"
           className="text-muted-foreground hover:text-foreground rounded-full hover:bg-secondary/50"
+          asChild
         >
-          <HelpCircle className="h-5 w-5" />
-        </Button>
-
-        <Button
-          variant="ghost"
-          size="icon"
-          className="relative text-muted-foreground hover:text-foreground rounded-full hover:bg-secondary/50"
-        >
-          <Bell className="h-5 w-5" />
-          <span className="absolute top-2.5 right-2.5 h-2 w-2 rounded-full bg-primary ring-2 ring-background animate-pulse" />
+          <Link href={"/tour"}>
+            <HelpCircle className="h-5 w-5" />
+          </Link>
         </Button>
 
         <ModeToggle />

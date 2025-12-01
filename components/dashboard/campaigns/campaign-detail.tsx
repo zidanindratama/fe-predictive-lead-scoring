@@ -4,33 +4,34 @@ import { useRouter } from "next/navigation";
 import { useGetData } from "@/hooks/use-get-data";
 import { usePostData } from "@/hooks/use-post-data";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ArrowLeft,
   Play,
   Edit,
-  Target,
   TrendingUp,
   CheckCircle2,
   XCircle,
-  Briefcase,
-  Users,
-  GraduationCap,
-  Heart,
+  Target,
   Calendar,
-  Code,
-  PieChart,
-  ListFilter,
   BarChart3,
   Rocket,
+  ListFilter,
+  Code,
+  Users,
+  Briefcase,
+  Heart,
+  GraduationCap,
+  PieChart,
 } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import Link from "next/link";
 import { TargetAudienceTable } from "@/components/dashboard/campaigns/target-audience/target-audience-table";
-import { EDUCATION_OPTIONS, JOB_OPTIONS, MARITAL_OPTIONS } from "./_data/const";
 import { Loader2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { EDUCATION_OPTIONS, JOB_OPTIONS, MARITAL_OPTIONS } from "./_data/const";
 
 interface CampaignDetailProps {
   id: string;
@@ -47,7 +48,10 @@ export function CampaignDetail({ id }: CampaignDetailProps) {
 
   const { mutate: runCampaign, isPending: isRunning } = usePostData(
     `/campaigns/${id}/run`,
-    [["campaigns", id]],
+    [
+      ["campaigns", id],
+      ["campaign-targets", id],
+    ],
     {
       onSuccess: (res: any) => {
         toast.success(
@@ -319,7 +323,7 @@ export function CampaignDetail({ id }: CampaignDetailProps) {
                 Ready to Simulate
               </h3>
               <p className="text-sm text-muted-foreground max-w-sm mt-2 mb-8">
-                This campaign hasn't been run yet. Start the simulation to
+                This campaign hasn&apos;t been run yet. Start the simulation to
                 process customer data and generate predictive scores.
               </p>
               <Button
@@ -341,7 +345,7 @@ export function CampaignDetail({ id }: CampaignDetailProps) {
               </Button>
             </Card>
           ) : (
-            <TargetAudienceTable criteria={campaign.criteria} />
+            <TargetAudienceTable campaignId={id} />
           )}
         </div>
       </div>

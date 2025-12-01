@@ -115,7 +115,6 @@ export default function CustomerDatatable() {
   }
 
   const { data, isLoading } = useGetData<CustomerResponse>(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ["customers", queryParams] as any,
     "/customers",
     queryParams

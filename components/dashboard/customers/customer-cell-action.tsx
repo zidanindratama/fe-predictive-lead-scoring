@@ -49,7 +49,6 @@ export const CustomerCellAction = ({ data }: { data: Customer }) => {
         queryClient.invalidateQueries({ queryKey: ["customers"] });
         setDeleteOpen(false);
       },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       onError: (error: any) => {
         toast.error(
           error?.response?.data?.message || "Failed to delete customer"

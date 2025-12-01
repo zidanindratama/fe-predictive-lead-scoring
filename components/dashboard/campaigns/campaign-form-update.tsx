@@ -396,7 +396,6 @@ export function CampaignFormUpdate({ campaignId }: CampaignFormUpdateProps) {
                             <SelectItem value="all">Any Status</SelectItem>
                             <SelectItem value="yes">Has Loan</SelectItem>
                             <SelectItem value="no">No Loan</SelectItem>
-                            <SelectItem value="unknown">Unknown</SelectItem>
                           </SelectContent>
                         </Select>
                       </FormItem>
@@ -421,7 +420,6 @@ export function CampaignFormUpdate({ campaignId }: CampaignFormUpdateProps) {
                             <SelectItem value="all">Any Status</SelectItem>
                             <SelectItem value="yes">Has Loan</SelectItem>
                             <SelectItem value="no">No Loan</SelectItem>
-                            <SelectItem value="unknown">Unknown</SelectItem>
                           </SelectContent>
                         </Select>
                       </FormItem>

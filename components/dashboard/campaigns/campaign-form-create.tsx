@@ -62,7 +62,6 @@ export function CampaignFormCreate() {
   );
 
   const onSubmit = (data: CampaignFormValues) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const newCriteria: any = {};
 
     if (data.ageMin !== undefined || data.ageMax !== undefined) {
@@ -334,7 +333,6 @@ export function CampaignFormCreate() {
                             <SelectItem value="all">Any Status</SelectItem>
                             <SelectItem value="yes">Has Loan</SelectItem>
                             <SelectItem value="no">No Loan</SelectItem>
-                            <SelectItem value="unknown">Unknown</SelectItem>
                           </SelectContent>
                         </Select>
                       </FormItem>
@@ -359,7 +357,6 @@ export function CampaignFormCreate() {
                             <SelectItem value="all">Any Status</SelectItem>
                             <SelectItem value="yes">Has Loan</SelectItem>
                             <SelectItem value="no">No Loan</SelectItem>
-                            <SelectItem value="unknown">Unknown</SelectItem>
                           </SelectContent>
                         </Select>
                       </FormItem>

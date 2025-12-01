@@ -79,7 +79,6 @@ export function CustomerFormUpdate({ id }: CustomerFormUpdateProps) {
 
   const { data: user } = useGetData<AuthUser>(["me"], "/auth/me");
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: initialData, isLoading: isLoadingData } = useGetData<any>(
     ["customer", id],
     `/customers/${id}`
@@ -90,12 +89,12 @@ export function CustomerFormUpdate({ id }: CustomerFormUpdateProps) {
       return {
         name: "",
         age: 0,
-        job: "unknown",
-        marital: "unknown",
-        education: "unknown",
-        default: "unknown",
-        housing: "unknown",
-        loan: "unknown",
+        job: "",
+        marital: "single",
+        education: "university.degree",
+        default: "no",
+        housing: "no",
+        loan: "no",
         contact: "cellular",
         month: "",
         day_of_week: "",
@@ -115,17 +114,17 @@ export function CustomerFormUpdate({ id }: CustomerFormUpdateProps) {
     return {
       name: initialData.name || "",
       age: initialData.age || 0,
-      job: initialData.job || "unknown",
-      marital: initialData.marital || "unknown",
-      education: initialData.education || "unknown",
-      default: initialData.creditDefault || "unknown",
-      housing: initialData.housing || "unknown",
-      loan: initialData.loan || "unknown",
+      job: initialData.job || "",
+      marital: initialData.marital || "single",
+      education: initialData.education || "university.degree",
+      default: initialData.creditDefault || "no",
+      housing: initialData.housing || "no",
+      loan: initialData.loan || "no",
       contact: initialData.contact || "cellular",
-      month: initialData.month || "",
-      day_of_week: initialData.day_of_week || "",
+      month: initialData.month || "jan",
+      day_of_week: initialData.day_of_week || "mon",
       duration: initialData.duration || 0,
-      campaign: initialData.campaign || 0,
+      campaign: initialData.campaign || 1,
       pdays: initialData.pdays || 999,
       previous: initialData.previous || 0,
       poutcome: initialData.poutcome || "nonexistent",
@@ -150,7 +149,6 @@ export function CustomerFormUpdate({ id }: CustomerFormUpdateProps) {
     }
   }, [initialData, defaultValues, form]);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { mutate: updateCustomer, isPending: isUpdating } = usePatchData<
     any,
     CustomerFormValues
@@ -159,7 +157,6 @@ export function CustomerFormUpdate({ id }: CustomerFormUpdateProps) {
       toast.success("Customer updated successfully");
       router.push("/dashboard/customers");
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (err: any) => {
       toast.error(err?.response?.data?.message || "Failed to update customer");
     },

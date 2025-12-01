@@ -3,17 +3,17 @@
 import { useRouter } from "next/navigation";
 import { type Resolver, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { 
-  Loader2,  
-  UserPlus, 
-  Info, 
-  Wallet, 
-  Phone, 
+import {
+  Loader2,
+  UserPlus,
+  Info,
+  Wallet,
+  Phone,
   TrendingUp,
   User,
   Briefcase,
   GraduationCap,
-  CreditCard
+  CreditCard,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -59,14 +59,16 @@ import {
   EDUCATION_OPTIONS,
   YES_NO_OPTIONS,
   CONTACT_OPTIONS,
-  POUTCOME_OPTIONS
+  POUTCOME_OPTIONS,
 } from "./_data/const";
 
 export function CustomerFormCreate() {
   const router = useRouter();
 
   const form = useForm<CustomerFormValues>({
-    resolver: zodResolver(customerFormSchema) as unknown as Resolver<CustomerFormValues>,
+    resolver: zodResolver(
+      customerFormSchema
+    ) as unknown as Resolver<CustomerFormValues>,
     defaultValues: {
       name: "",
       age: 30,
@@ -92,21 +94,18 @@ export function CustomerFormCreate() {
     },
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { mutate: createCustomer, isPending } = usePostData<any, CustomerFormValues>(
-    "/customers",
-    [["customers"]],
-    {
-      onSuccess: () => {
-        toast.success("Customer created successfully");
-        router.push("/dashboard/customers");
-      },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      onError: (err: any) => {
-        toast.error(err?.response?.data?.message || "Failed to create customer");
-      }
-    }
-  );
+  const { mutate: createCustomer, isPending } = usePostData<
+    any,
+    CustomerFormValues
+  >("/customers", [["customers"]], {
+    onSuccess: () => {
+      toast.success("Customer created successfully");
+      router.push("/dashboard/customers");
+    },
+    onError: (err: any) => {
+      toast.error(err?.response?.data?.message || "Failed to create customer");
+    },
+  });
 
   const onSubmit = (data: CustomerFormValues) => {
     createCustomer(data);
@@ -116,7 +115,6 @@ export function CustomerFormCreate() {
     <div className="max-w-5xl mx-auto space-y-8 pb-10">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          
           <div className="flex flex-col md:flex-row md:items-center justify-end gap-4">
             <div className="flex items-center gap-2">
               <Button
@@ -155,7 +153,8 @@ export function CustomerFormCreate() {
                 <Info className="h-4 w-4" />
                 <AlertTitle>Data Quality</AlertTitle>
                 <AlertDescription className="text-xs mt-1">
-                  Accurate job and education data significantly improves lead scoring precision.
+                  Accurate job and education data significantly improves lead
+                  scoring precision.
                 </AlertDescription>
               </Alert>
             </div>
@@ -198,7 +197,10 @@ export function CustomerFormCreate() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Marital Status</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select status" />
@@ -222,9 +224,13 @@ export function CustomerFormCreate() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="flex items-center gap-2">
-                        <Briefcase className="w-3.5 h-3.5 text-muted-foreground" /> Job
+                        <Briefcase className="w-3.5 h-3.5 text-muted-foreground" />{" "}
+                        Job
                       </FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select job" />
@@ -248,9 +254,13 @@ export function CustomerFormCreate() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="flex items-center gap-2">
-                        <GraduationCap className="w-3.5 h-3.5 text-muted-foreground" /> Education
+                        <GraduationCap className="w-3.5 h-3.5 text-muted-foreground" />{" "}
+                        Education
                       </FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select education" />
@@ -274,27 +284,39 @@ export function CustomerFormCreate() {
 
           <Separator />
 
-          <Accordion type="single" collapsible defaultValue="financial" className="w-full space-y-4">
-            
-            <AccordionItem value="financial" className="border rounded-xl bg-card overflow-hidden">
+          <Accordion
+            type="single"
+            collapsible
+            defaultValue="financial"
+            className="w-full space-y-4"
+          >
+            <AccordionItem
+              value="financial"
+              className="border rounded-xl bg-card overflow-hidden"
+            >
               <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-slate-50/50 dark:hover:bg-zinc-900/50 transition-colors">
                 <div className="flex items-center gap-3">
                   <CreditCard className="h-5 w-5 text-green-600 dark:text-green-400" />
-                  <span className="font-semibold text-base">Financial Info</span>
+                  <span className="font-semibold text-base">
+                    Financial Info
+                  </span>
                 </div>
               </AccordionTrigger>
               <AccordionContent className="px-6 pb-6 pt-2">
                 <div className="grid gap-6 md:grid-cols-3">
                   <div className="md:col-span-1 space-y-3">
-                     <div className="p-3 bg-green-50 dark:bg-green-950/20 rounded-xl border border-green-100 dark:border-green-900/30">
-                        <div className="flex items-center gap-2 mb-2 text-green-700 dark:text-green-400">
-                           <Wallet className="h-4 w-4" />
-                           <span className="text-sm font-semibold">Financial Details</span>
-                        </div>
-                        <p className="text-xs text-muted-foreground leading-relaxed">
-                           Information regarding the customer&apos;s current banking products and credit history status.
-                        </p>
-                     </div>
+                    <div className="p-3 bg-green-50 dark:bg-green-950/20 rounded-xl border border-green-100 dark:border-green-900/30">
+                      <div className="flex items-center gap-2 mb-2 text-green-700 dark:text-green-400">
+                        <Wallet className="h-4 w-4" />
+                        <span className="text-sm font-semibold">
+                          Financial Details
+                        </span>
+                      </div>
+                      <p className="text-xs text-muted-foreground leading-relaxed">
+                        Information regarding the customer&apos;s current
+                        banking products and credit history status.
+                      </p>
+                    </div>
                   </div>
 
                   <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -304,13 +326,20 @@ export function CustomerFormCreate() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Housing Loan?</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
                             <FormControl>
-                              <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
+                              <SelectTrigger className="w-full">
+                                <SelectValue />
+                              </SelectTrigger>
                             </FormControl>
                             <SelectContent>
                               {YES_NO_OPTIONS.map((opt) => (
-                                <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                                <SelectItem key={opt.value} value={opt.value}>
+                                  {opt.label}
+                                </SelectItem>
                               ))}
                             </SelectContent>
                           </Select>
@@ -324,13 +353,20 @@ export function CustomerFormCreate() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Personal Loan?</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
                             <FormControl>
-                              <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
+                              <SelectTrigger className="w-full">
+                                <SelectValue />
+                              </SelectTrigger>
                             </FormControl>
                             <SelectContent>
                               {YES_NO_OPTIONS.map((opt) => (
-                                <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                                <SelectItem key={opt.value} value={opt.value}>
+                                  {opt.label}
+                                </SelectItem>
                               ))}
                             </SelectContent>
                           </Select>
@@ -343,7 +379,10 @@ export function CustomerFormCreate() {
               </AccordionContent>
             </AccordionItem>
 
-            <AccordionItem value="campaign" className="border rounded-xl bg-card overflow-hidden">
+            <AccordionItem
+              value="campaign"
+              className="border rounded-xl bg-card overflow-hidden"
+            >
               <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-slate-50/50 dark:hover:bg-zinc-900/50 transition-colors">
                 <div className="flex items-center gap-3">
                   <Phone className="h-5 w-5 text-blue-600 dark:text-blue-400" />
@@ -353,15 +392,18 @@ export function CustomerFormCreate() {
               <AccordionContent className="px-6 pb-6 pt-2">
                 <div className="grid gap-6 md:grid-cols-3">
                   <div className="md:col-span-1 space-y-3">
-                     <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-xl border border-blue-100 dark:border-blue-900/30">
-                        <div className="flex items-center gap-2 mb-2 text-blue-700 dark:text-blue-400">
-                           <Phone className="h-4 w-4" />
-                           <span className="text-sm font-semibold">Contact Details</span>
-                        </div>
-                        <p className="text-xs text-muted-foreground leading-relaxed">
-                           Details of the last contact made with this customer during the previous campaign.
-                        </p>
-                     </div>
+                    <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-xl border border-blue-100 dark:border-blue-900/30">
+                      <div className="flex items-center gap-2 mb-2 text-blue-700 dark:text-blue-400">
+                        <Phone className="h-4 w-4" />
+                        <span className="text-sm font-semibold">
+                          Contact Details
+                        </span>
+                      </div>
+                      <p className="text-xs text-muted-foreground leading-relaxed">
+                        Details of the last contact made with this customer
+                        during the previous campaign.
+                      </p>
+                    </div>
                   </div>
 
                   <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -397,13 +439,20 @@ export function CustomerFormCreate() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Contact Method</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
                             <FormControl>
-                              <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
+                              <SelectTrigger className="w-full">
+                                <SelectValue />
+                              </SelectTrigger>
                             </FormControl>
                             <SelectContent>
                               {CONTACT_OPTIONS.map((opt) => (
-                                <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                                <SelectItem key={opt.value} value={opt.value}>
+                                  {opt.label}
+                                </SelectItem>
                               ))}
                             </SelectContent>
                           </Select>
@@ -433,7 +482,9 @@ export function CustomerFormCreate() {
                           <FormControl>
                             <Input type="number" {...field} />
                           </FormControl>
-                          <FormDescription className="text-[10px]">Days since last contact (999 if none)</FormDescription>
+                          <FormDescription className="text-[10px]">
+                            Days since last contact (999 if none)
+                          </FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -447,7 +498,9 @@ export function CustomerFormCreate() {
                           <FormControl>
                             <Input type="number" {...field} />
                           </FormControl>
-                           <FormDescription className="text-[10px]">Number of contacts before this campaign</FormDescription>
+                          <FormDescription className="text-[10px]">
+                            Number of contacts before this campaign
+                          </FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -459,13 +512,20 @@ export function CustomerFormCreate() {
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Previous Outcome</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
                               <FormControl>
-                                <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
+                                <SelectTrigger className="w-full">
+                                  <SelectValue />
+                                </SelectTrigger>
                               </FormControl>
                               <SelectContent>
                                 {POUTCOME_OPTIONS.map((opt) => (
-                                  <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                                  <SelectItem key={opt.value} value={opt.value}>
+                                    {opt.label}
+                                  </SelectItem>
                                 ))}
                               </SelectContent>
                             </Select>
@@ -479,25 +539,33 @@ export function CustomerFormCreate() {
               </AccordionContent>
             </AccordionItem>
 
-            <AccordionItem value="economic" className="border rounded-xl bg-card overflow-hidden">
+            <AccordionItem
+              value="economic"
+              className="border rounded-xl bg-card overflow-hidden"
+            >
               <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-slate-50/50 dark:hover:bg-zinc-900/50 transition-colors">
                 <div className="flex items-center gap-3">
                   <TrendingUp className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                  <span className="font-semibold text-base">Economic Indicators</span>
+                  <span className="font-semibold text-base">
+                    Economic Indicators
+                  </span>
                 </div>
               </AccordionTrigger>
               <AccordionContent className="px-6 pb-6 pt-2">
                 <div className="grid gap-6 md:grid-cols-3">
                   <div className="md:col-span-1 space-y-3">
-                     <div className="p-3 bg-purple-50 dark:bg-purple-950/20 rounded-xl border border-purple-100 dark:border-purple-900/30">
-                        <div className="flex items-center gap-2 mb-2 text-purple-700 dark:text-purple-400">
-                           <TrendingUp className="h-4 w-4" />
-                           <span className="text-sm font-semibold">Macroeconomics</span>
-                        </div>
-                        <p className="text-xs text-muted-foreground leading-relaxed">
-                           Economic conditions at the time of contact that may affect customer behavior.
-                        </p>
-                     </div>
+                    <div className="p-3 bg-purple-50 dark:bg-purple-950/20 rounded-xl border border-purple-100 dark:border-purple-900/30">
+                      <div className="flex items-center gap-2 mb-2 text-purple-700 dark:text-purple-400">
+                        <TrendingUp className="h-4 w-4" />
+                        <span className="text-sm font-semibold">
+                          Macroeconomics
+                        </span>
+                      </div>
+                      <p className="text-xs text-muted-foreground leading-relaxed">
+                        Economic conditions at the time of contact that may
+                        affect customer behavior.
+                      </p>
+                    </div>
                   </div>
 
                   <div className="md:col-span-2 grid grid-cols-2 gap-4">
@@ -506,7 +574,9 @@ export function CustomerFormCreate() {
                       name="emp_var_rate"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-xs">Emp. Var. Rate</FormLabel>
+                          <FormLabel className="text-xs">
+                            Emp. Var. Rate
+                          </FormLabel>
                           <FormControl>
                             <Input type="number" step="0.1" {...field} />
                           </FormControl>
@@ -558,7 +628,9 @@ export function CustomerFormCreate() {
                       name="nr_employed"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-xs">Nr. Employed</FormLabel>
+                          <FormLabel className="text-xs">
+                            Nr. Employed
+                          </FormLabel>
                           <FormControl>
                             <Input type="number" step="0.1" {...field} />
                           </FormControl>
@@ -570,9 +642,7 @@ export function CustomerFormCreate() {
                 </div>
               </AccordionContent>
             </AccordionItem>
-
           </Accordion>
-
         </form>
       </Form>
     </div>

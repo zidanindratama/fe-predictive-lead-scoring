@@ -187,7 +187,7 @@ export default function HomeContent() {
         <Card className="border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-slate-900 dark:text-slate-100 hover:border-slate-300 dark:hover:border-zinc-700 transition-colors shadow-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-slate-500 dark:text-slate-400">
-              Active Campaigns
+              Campaigns
             </CardTitle>
             <PieIcon className="h-4 w-4 text-orange-500" />
           </CardHeader>
