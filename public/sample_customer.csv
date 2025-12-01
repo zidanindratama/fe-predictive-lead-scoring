@@ -1,0 +1,26 @@
+name,age,job,marital,education,default,housing,loan,contact,month,day_of_week,duration,campaign,pdays,previous,poutcome,emp_var_rate,cons_price_idx,cons_conf_idx,euribor3m,nr_employed
+Budi Santoso,56,housemaid,married,basic.4y,no,no,no,telephone,may,mon,261,1,999,0,nonexistent,1.1,93.994,-36.4,4.857,5191
+Siti Aminah,37,services,married,high.school,no,yes,no,telephone,may,mon,226,1,999,0,nonexistent,1.1,93.994,-36.4,4.857,5191
+Agus Pratama,40,admin,married,basic.6y,no,no,no,telephone,may,mon,151,1,999,0,nonexistent,1.1,93.994,-36.4,4.857,5191
+Dewi Sartika,45,services,married,basic.9y,no,no,no,telephone,may,mon,307,1,999,0,nonexistent,1.1,93.994,-36.4,4.857,5191
+Eko Wijaya,59,admin,married,professional.course,no,no,no,telephone,may,mon,139,1,999,0,nonexistent,1.1,93.994,-36.4,4.857,5191
+Rina Suryani,24,technician,single,professional.course,no,yes,no,telephone,may,mon,380,1,999,0,nonexistent,1.1,93.994,-36.4,4.857,5191
+Hendra Gunawan,25,services,single,high.school,no,yes,no,telephone,may,mon,50,1,999,0,nonexistent,1.1,93.994,-36.4,4.857,5191
+Lestari Putri,41,blue-collar,married,university.degree,no,no,no,telephone,may,mon,55,1,999,0,nonexistent,1.1,93.994,-36.4,4.857,5191
+Doni Saputra,29,blue-collar,single,high.school,no,no,yes,cellular,jul,wed,137,2,999,0,nonexistent,1.4,93.918,-42.7,4.963,5228.1
+Maya Indah,57,self-employed,married,university.degree,no,no,yes,telephone,may,mon,149,1,999,0,nonexistent,1.1,93.994,-36.4,4.857,5191
+Reza Rahardian,35,blue-collar,married,basic.9y,no,yes,no,cellular,may,fri,300,2,999,0,nonexistent,-1.8,92.893,-46.2,1.25,5099.1
+Indra Lesmana,54,unemployed,married,basic.4y,no,yes,yes,cellular,may,tue,800,1,999,1,failure,-1.8,92.893,-46.2,1.291,5099.1
+Tari Utami,30,management,single,university.degree,no,yes,no,cellular,nov,thu,420,1,999,0,nonexistent,-0.1,93.2,-42,4.076,5195.8
+Gilang Ramadhan,40,entrepreneur,married,university.degree,no,yes,no,cellular,nov,wed,200,1,999,0,nonexistent,-0.1,93.2,-42,4.12,5195.8
+Nia Daniaty,39,blue-collar,married,basic.9y,no,no,no,cellular,jul,mon,120,3,999,0,nonexistent,1.4,93.918,-42.7,4.96,5228.1
+Fajar Nugraha,30,technician,single,university.degree,no,no,no,cellular,aug,tue,560,1,6,1,success,-2.9,92.201,-31.4,0.883,5076.2
+Sarah Azhari,28,student,single,high.school,no,yes,no,cellular,sep,wed,350,1,999,1,failure,-3.4,92.379,-29.8,0.762,5017.5
+Bambang Pamungkas,44,management,married,university.degree,no,no,no,cellular,nov,fri,150,1,999,0,nonexistent,-0.1,93.2,-42,4.021,5195.8
+Yulia Rachman,33,admin,married,high.school,no,yes,no,cellular,may,thu,1042,1,999,0,nonexistent,-1.8,92.893,-46.2,1.327,5099.1
+Dedi Corbuzier,48,blue-collar,married,basic.4y,no,no,no,cellular,jul,tue,112,5,999,0,nonexistent,1.4,93.918,-42.7,4.961,5228.1
+Cinta Laura,24,student,single,university.degree,no,yes,no,cellular,aug,mon,240,1,3,2,success,-2.9,92.201,-31.4,0.884,5076.2
+Raffi Ahmad,36,entrepreneur,married,university.degree,no,yes,no,cellular,jun,thu,180,2,999,0,nonexistent,-2.9,92.963,-40.8,1.26,5076.2
+Nagita Slavina,34,admin,married,university.degree,no,no,no,cellular,aug,fri,320,1,999,0,nonexistent,-2.9,92.201,-31.4,0.849,5076.2
+Sule Prikitiw,42,services,single,high.school,no,yes,no,cellular,jul,wed,90,2,999,0,nonexistent,1.4,93.918,-42.7,4.962,5228.1
+Andre Taulany,43,technician,married,professional.course,no,yes,no,cellular,nov,mon,600,1,999,1,failure,-0.1,93.2,-42,4.191,5195.8
