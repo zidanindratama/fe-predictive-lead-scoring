@@ -20,7 +20,9 @@ export default function ImportCustomerPage() {
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Import Customers</h1>
+          <h1 className="text-2xl font-bold tracking-tight">
+            Import Customers
+          </h1>
           <p className="text-sm text-muted-foreground">
             Bulk upload customer data from external files.
           </p>
