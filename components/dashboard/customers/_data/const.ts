@@ -44,6 +44,29 @@ export const POUTCOME_OPTIONS: Option[] = [
   { value: "success", label: "Success" },
 ];
 
+export const MONTH_OPTIONS: Option[] = [
+  { value: "mar", label: "March" },
+  { value: "apr", label: "April" },
+  { value: "may", label: "May" },
+  { value: "jun", label: "June" },
+  { value: "jul", label: "July" },
+  { value: "aug", label: "August" },
+  { value: "sep", label: "September" },
+  { value: "oct", label: "October" },
+  { value: "nov", label: "November" },
+  { value: "dec", label: "December" },
+];
+
+export const DAY_OPTIONS: Option[] = [
+  { value: "mon", label: "Monday" },
+  { value: "tue", label: "Tuesday" },
+  { value: "wed", label: "Wednesday" },
+  { value: "thu", label: "Thursday" },
+  { value: "fri", label: "Friday" },
+  { value: "sat", label: "Saturday" },
+  { value: "sun", label: "Sunday" },
+];
+
 export const mapValuesToOptions = (
   values: string[],
   optionsSource: Option[]
