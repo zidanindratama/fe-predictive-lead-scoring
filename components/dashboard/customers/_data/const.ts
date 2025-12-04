@@ -45,8 +45,6 @@ export const POUTCOME_OPTIONS: Option[] = [
 ];
 
 export const MONTH_OPTIONS: Option[] = [
-  { value: "jan", label: "January" },
-  { value: "feb", label: "February" },
   { value: "mar", label: "March" },
   { value: "apr", label: "April" },
   { value: "may", label: "May" },
