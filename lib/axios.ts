@@ -5,7 +5,7 @@ const BASE_URL = "https://be-predictive-lead-scoring.vercel.app";
 const LOCAL_URL = "http://localhost:5000";
 
 export const axiosInstance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: LOCAL_URL,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
@@ -92,7 +92,7 @@ axiosInstance.interceptors.response.use(
           typeof window !== "undefined" ? window.location.origin : "";
 
         const { data } = await axios.post(
-          `${BASE_URL}/auth/refresh`,
+          `${LOCAL_URL}/auth/refresh`,
           {},
           {
             withCredentials: true,
