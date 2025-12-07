@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 const stats = [
   { label: "Data Points Analyzed", value: "50M+" },
-  { label: "Prediction Accuracy", value: "90.4%" },
+  { label: "Prediction Accuracy", value: "98.2%" },
   { label: "Banking Partners", value: "200+" },
   { label: "Revenue Generated", value: "$1B+" },
 ];

@@ -2,7 +2,6 @@ import { Badge } from "@/components/ui/badge";
 import { CTASection } from "@/components/main/(global)/cta-section";
 import { TourInteractive } from "@/components/main/tour/tour-interactive";
 import { Transformation } from "@/components/main/tour/transformation";
-import { ModelPerformanceSection } from "@/components/main/tour/model-performance";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -30,7 +29,6 @@ export default function TourPage() {
         </p>
       </section>
       <TourInteractive />
-      <ModelPerformanceSection />
       <Transformation />
       <CTASection />
     </div>

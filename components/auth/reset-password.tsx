@@ -15,7 +15,7 @@ import {
   EyeOff,
   Loader2,
   CheckCircle2,
-  RefreshCw,
+  RefreshCw, // Icon untuk resend
 } from "lucide-react";
 import { toast } from "sonner";
 
