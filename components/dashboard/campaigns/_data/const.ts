@@ -19,9 +19,9 @@ export const MARITAL_OPTIONS: Option[] = [
 ];
 
 export const EDUCATION_OPTIONS: Option[] = [
-  { value: "basic.4y", label: "Basic Education (4y)" },
-  { value: "basic.6y", label: "Basic Education (6y)" },
-  { value: "basic.9y", label: "Basic Education (9y)" },
+  { value: "basic.4y", label: "Elementary School (4y)" },
+  { value: "basic.6y", label: "Elementary School (6y)" },
+  { value: "basic.9y", label: "Middle School" },
   { value: "high.school", label: "High School" },
   { value: "illiterate", label: "Illiterate" },
   { value: "professional.course", label: "Professional Course" },
