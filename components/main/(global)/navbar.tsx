@@ -38,6 +38,7 @@ const navLinks = [
   { name: "Workflow", href: "/workflow" },
   { name: "Features", href: "/features" },
   { name: "Tour", href: "/tour" },
+  { name: "Documentation", href: "/documentation" },
   { name: "Contact", href: "/contact" },
 ];
 
@@ -162,8 +163,8 @@ export const Navbar = () => {
                   className={cn(
                     "relative px-4 py-2 text-sm font-medium transition-colors duration-200 z-10",
                     isActive
-                      ? "text-primary font-semibold" // Teks jadi Biru (Primary) saat aktif
-                      : "text-muted-foreground hover:text-primary" // Hover jadi biru
+                      ? "text-primary font-semibold"
+                      : "text-muted-foreground hover:text-primary"
                   )}
                 >
                   {hoveredPath === link.href && !isActive && (
