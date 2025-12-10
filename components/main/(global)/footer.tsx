@@ -6,6 +6,7 @@ export const Footer = () => {
     { name: "Workflow", href: "/workflow" },
     { name: "Features", href: "/features" },
     { name: "Tour", href: "/tour" },
+    { name: "Documentation", href: "/documentation" },
     { name: "Contact", href: "/contact" },
   ];
 

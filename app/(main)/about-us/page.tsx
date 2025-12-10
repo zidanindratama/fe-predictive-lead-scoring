@@ -6,7 +6,7 @@ import { CTASection } from "@/components/main/(global)/cta-section";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About Us - The Future of Banking Sales",
+  title: "About Us",
   description:
     "Meet the team behind SmartBank. We are engineers and data scientists dedicated to transforming how financial institutions utilize their data.",
 };
