@@ -35,16 +35,16 @@ export function FrontendSection() {
       />
 
       <Tabs defaultValue="stack" className="w-full">
-        <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent mb-6">
+        <TabsList className="bg-secondary/30 border border-border p-1 h-auto overflow-x-auto w-full justify-start mb-6">
           <TabsTrigger
             value="stack"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-3 px-4 font-medium text-muted-foreground data-[state=active]:text-foreground transition-all"
+            className="px-6 py-2 min-w-fit rounded-none border-b-2 border-transparent data-[state=active]:border-blue-500 data-[state=active]:bg-transparent data-[state=active]:text-blue-500 data-[state=active]:shadow-none font-medium text-muted-foreground hover:text-foreground transition-all"
           >
             Tech Stack
           </TabsTrigger>
           <TabsTrigger
             value="structure"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-3 px-4 font-medium text-muted-foreground data-[state=active]:text-foreground transition-all"
+            className="px-6 py-2 min-w-fit rounded-none border-b-2 border-transparent data-[state=active]:border-blue-500 data-[state=active]:bg-transparent data-[state=active]:text-blue-500 data-[state=active]:shadow-none font-medium text-muted-foreground hover:text-foreground transition-all"
           >
             Project Structure
           </TabsTrigger>
