@@ -144,7 +144,7 @@ export function ArchitectureSection() {
 
           <div className="absolute top-[20px] left-[320px] w-[560px] h-[560px] border border-indigo-500/20 rounded-3xl bg-indigo-500/[0.03]">
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs font-bold text-indigo-400 bg-[#020617] px-3 border border-indigo-500/20 rounded-full z-10 uppercase tracking-widest">
-              App Cluster (VPC)
+              App Cluster
             </div>
           </div>
 
