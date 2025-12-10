@@ -11,13 +11,6 @@ import { BackendSection } from "@/components/main/documentation/sections/backend
 import { FrontendSection } from "@/components/main/documentation/sections/frontend";
 import { MlSection } from "@/components/main/documentation/sections/ml-engine";
 import { DeploymentSection } from "@/components/main/documentation/sections/deployment";
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Documentation",
-  description:
-    "Explore the complete SmartBank documentation, including architecture, backend, frontend, ML engine, and deployment processes.",
-};
 
 export default function DocumentationPage() {
   const [activeSection, setActiveSection] = useState("intro");
