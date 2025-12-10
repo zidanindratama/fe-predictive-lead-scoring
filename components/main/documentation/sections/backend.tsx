@@ -54,26 +54,28 @@ export function BackendSection() {
       />
 
       <Tabs defaultValue="overview" className="w-full">
-        <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent mb-6">
-          <TabsTrigger
-            value="overview"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-3 px-4 font-medium text-muted-foreground data-[state=active]:text-foreground transition-all"
-          >
-            Overview
-          </TabsTrigger>
-          <TabsTrigger
-            value="database"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-3 px-4 font-medium text-muted-foreground data-[state=active]:text-foreground transition-all"
-          >
-            Database
-          </TabsTrigger>
-          <TabsTrigger
-            value="security"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-3 px-4 font-medium text-muted-foreground data-[state=active]:text-foreground transition-all"
-          >
-            Security
-          </TabsTrigger>
-        </TabsList>
+        <div className="flex items-center justify-between mb-6">
+          <TabsList className="bg-secondary/30 border border-border p-1 h-auto overflow-x-auto w-full justify-start">
+            <TabsTrigger
+              value="overview"
+              className="px-6 py-2 min-w-fit rounded-none border-b-2 border-transparent data-[state=active]:border-blue-500 data-[state=active]:bg-transparent data-[state=active]:text-blue-500 data-[state=active]:shadow-none font-medium text-muted-foreground hover:text-foreground transition-all"
+            >
+              Architecture
+            </TabsTrigger>
+            <TabsTrigger
+              value="database"
+              className="px-6 py-2 min-w-fit rounded-none border-b-2 border-transparent data-[state=active]:border-blue-500 data-[state=active]:bg-transparent data-[state=active]:text-blue-500 data-[state=active]:shadow-none font-medium text-muted-foreground hover:text-foreground transition-all"
+            >
+              Data Layer
+            </TabsTrigger>
+            <TabsTrigger
+              value="security"
+              className="px-6 py-2 min-w-fit rounded-none border-b-2 border-transparent data-[state=active]:border-blue-500 data-[state=active]:bg-transparent data-[state=active]:text-blue-500 data-[state=active]:shadow-none font-medium text-muted-foreground hover:text-foreground transition-all"
+            >
+              Security
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         <TabsContent
           value="overview"
@@ -134,7 +136,9 @@ export function BackendSection() {
                 campaigns.module.ts
               </span>
             </div>
-            <CodeBlock code={moduleCode} lang="typescript" />
+            <div className="overflow-x-auto">
+              <CodeBlock code={moduleCode} lang="typescript" />
+            </div>
           </div>
         </TabsContent>
 
@@ -183,9 +187,9 @@ export function BackendSection() {
               </div>
             </div>
 
-            <div className="lg:col-span-3">
-              <div className="rounded-xl border border-border bg-card overflow-hidden h-full">
-                <div className="p-3 border-b bg-muted/30 flex justify-between items-center">
+            <div className="lg:col-span-3 min-w-0">
+              <div className="rounded-xl border border-border bg-card overflow-hidden h-full flex flex-col">
+                <div className="p-3 border-b bg-muted/30 flex justify-between items-center shrink-0">
                   <span className="font-mono text-sm font-semibold">
                     schema.prisma
                   </span>
@@ -193,7 +197,12 @@ export function BackendSection() {
                     MongoDB
                   </Badge>
                 </div>
-                <CodeBlock code={prismaSchema} lang="prisma" />
+
+                <div className="overflow-x-auto flex-1 w-full relative">
+                  <div className="min-w-full inline-block">
+                    <CodeBlock code={prismaSchema} lang="prisma" />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -254,54 +263,56 @@ export function BackendSection() {
             </Card>
           </div>
 
-          <div className="p-8 rounded-2xl border border-dashed border-border bg-secondary/10">
-            <h3 className="text-center font-bold text-lg mb-8">
-              Secure Request Pipeline
-            </h3>
-            <div className="flex flex-col md:flex-row items-center justify-center gap-4 text-sm">
-              <div className="px-6 py-3 bg-background border rounded-lg shadow-sm text-center">
-                <div className="font-bold mb-1">Client Request</div>
-                <div className="text-xs text-muted-foreground">
-                  Bearer Token
+          <div className="p-8 rounded-2xl border border-dashed border-border bg-secondary/10 overflow-x-auto">
+            <div className="min-w-[600px] mx-auto">
+              <h3 className="text-center font-bold text-lg mb-8">
+                Secure Request Pipeline
+              </h3>
+              <div className="flex flex-col md:flex-row items-center justify-center gap-4 text-sm">
+                <div className="px-6 py-3 bg-background border rounded-lg shadow-sm text-center">
+                  <div className="font-bold mb-1">Client Request</div>
+                  <div className="text-xs text-muted-foreground">
+                    Bearer Token
+                  </div>
                 </div>
-              </div>
 
-              <div className="w-0.5 h-8 md:w-8 md:h-0.5 bg-border relative">
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-border rounded-full" />
-              </div>
-
-              <div className="px-6 py-3 bg-orange-100 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg text-center">
-                <div className="font-bold text-orange-700 dark:text-orange-400 mb-1">
-                  JwtAuthGuard
+                <div className="w-0.5 h-8 md:w-8 md:h-0.5 bg-border relative">
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-border rounded-full" />
                 </div>
-                <div className="text-xs text-muted-foreground">
-                  Validates Signature
-                </div>
-              </div>
 
-              <div className="w-0.5 h-8 md:w-8 md:h-0.5 bg-border relative">
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-border rounded-full" />
-              </div>
-
-              <div className="px-6 py-3 bg-blue-100 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg text-center">
-                <div className="font-bold text-blue-700 dark:text-blue-400 mb-1">
-                  RolesGuard
+                <div className="px-6 py-3 bg-orange-100 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg text-center">
+                  <div className="font-bold text-orange-700 dark:text-orange-400 mb-1">
+                    JwtAuthGuard
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    Validates Signature
+                  </div>
                 </div>
-                <div className="text-xs text-muted-foreground">
-                  Checks Metadata
-                </div>
-              </div>
 
-              <div className="w-0.5 h-8 md:w-8 md:h-0.5 bg-border relative">
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-border rounded-full" />
-              </div>
-
-              <div className="px-6 py-3 bg-green-100 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-center">
-                <div className="font-bold text-green-700 dark:text-green-400 mb-1">
-                  Controller
+                <div className="w-0.5 h-8 md:w-8 md:h-0.5 bg-border relative">
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-border rounded-full" />
                 </div>
-                <div className="text-xs text-muted-foreground">
-                  Business Logic
+
+                <div className="px-6 py-3 bg-blue-100 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg text-center">
+                  <div className="font-bold text-blue-700 dark:text-blue-400 mb-1">
+                    RolesGuard
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    Checks Metadata
+                  </div>
+                </div>
+
+                <div className="w-0.5 h-8 md:w-8 md:h-0.5 bg-border relative">
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-border rounded-full" />
+                </div>
+
+                <div className="px-6 py-3 bg-green-100 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-center">
+                  <div className="font-bold text-green-700 dark:text-green-400 mb-1">
+                    Controller
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    Business Logic
+                  </div>
                 </div>
               </div>
             </div>
