@@ -136,11 +136,11 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## 👥 Tester Accounts
 
-| Role  | Email                                             | Password |
-| ----- | ------------------------------------------------- | -------- |
-| ADMIN | [admin@smartbank.com](mailto:admin@smartbank.com) | password |
-| STAFF | [staff@smartbank.com](mailto:staff@smartbank.com) | password |
-| USER  | [user@smartbank.com](mailto:user@smartbank.com)   | password |
+| Role  | Email                                             | Password    |
+| ----- | ------------------------------------------------- | ----------- |
+| ADMIN | [admin@smartbank.com](mailto:admin@smartbank.com) | password123 |
+| STAFF | [staff@smartbank.com](mailto:staff@smartbank.com) | password123 |
+| USER  | [user@smartbank.com](mailto:user@smartbank.com)   | password123 |
 
 ---
 
