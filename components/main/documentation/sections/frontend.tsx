@@ -68,13 +68,13 @@ export function FrontendSection() {
                     <Badge variant="secondary">App Router</Badge>
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    Leveraging React Server Components (RSC) for initial load
-                    performance and Client Components for interactivity.
+                    A modern full-stack application built using the latest React
+                    ecosystem standards.
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  <Badge variant="outline">Server Actions</Badge>
-                  <Badge variant="outline">Streaming SSR</Badge>
+                  <Badge variant="outline">TypeScript</Badge>
+                  <Badge variant="outline">Zod Schema</Badge>
                 </div>
               </CardContent>
             </Card>
