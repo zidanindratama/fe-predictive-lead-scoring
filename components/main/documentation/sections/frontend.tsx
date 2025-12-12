@@ -31,7 +31,7 @@ export function FrontendSection() {
       <SectionHeader
         title="Frontend Application"
         icon={Layout}
-        description="A modern, high-performance web client built with Next.js 14 App Router. Designed for rich interactivity, accessibility, and seamless data synchronization."
+        description="A modern, high-performance web client built with Next.js 16 App Router. Designed for rich interactivity, accessibility, and seamless data synchronization."
       />
 
       <Tabs defaultValue="stack" className="w-full">
@@ -64,7 +64,7 @@ export function FrontendSection() {
               <CardContent className="space-y-4">
                 <div>
                   <div className="flex justify-between items-center mb-1">
-                    <span className="font-bold">Next.js 14</span>
+                    <span className="font-bold">Next.js 16</span>
                     <Badge variant="secondary">App Router</Badge>
                   </div>
                   <p className="text-sm text-muted-foreground">
