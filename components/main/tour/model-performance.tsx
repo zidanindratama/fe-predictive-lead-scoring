@@ -119,8 +119,9 @@ export const ModelPerformanceSection = () => {
         ),
         desc: "Global Correctness",
         color: "text-blue-500",
-        bg: "bg-blue-500/10",
-        border: "border-blue-500/20",
+        darkColor: "bg-blue-400",
+        bg: "bg-blue-500/10 dark:bg-blue-400/20",
+        border: "border-blue-500/20 dark:border-blue-400/30",
         icon: CheckCircle2,
       },
       {
@@ -132,8 +133,9 @@ export const ModelPerformanceSection = () => {
         ),
         desc: "Trustworthiness",
         color: "text-purple-500",
-        bg: "bg-purple-500/10",
-        border: "border-purple-500/20",
+        darkColor: "bg-purple-400",
+        bg: "bg-purple-500/10 dark:bg-purple-400/20",
+        border: "border-purple-500/20 dark:border-purple-400/30",
         icon: Target,
       },
       {
@@ -145,8 +147,9 @@ export const ModelPerformanceSection = () => {
         ),
         desc: "Opportunity Capture",
         color: "text-orange-500",
-        bg: "bg-orange-500/10",
-        border: "border-orange-500/20",
+        darkColor: "bg-orange-400",
+        bg: "bg-orange-500/10 dark:bg-orange-400/20",
+        border: "border-orange-500/20 dark:border-orange-400/30",
         icon: Activity,
       },
       {
@@ -158,8 +161,9 @@ export const ModelPerformanceSection = () => {
         ),
         desc: "Separability",
         color: "text-emerald-500",
-        bg: "bg-emerald-500/10",
-        border: "border-emerald-500/20",
+        darkColor: "bg-emerald-400",
+        bg: "bg-emerald-500/10 dark:bg-emerald-400/20",
+        border: "border-emerald-500/20 dark:border-emerald-400/30",
         icon: TrendingUp,
       },
     ];
@@ -172,7 +176,7 @@ export const ModelPerformanceSection = () => {
           <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
             Built on <span className="text-primary">Transparent AI</span>
           </h2>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-lg text-zinc-600 dark:text-zinc-400">
             We believe in explaining our predictions. Monitor the real-time
             health and accuracy of the models driving your business growth.
           </p>
@@ -180,29 +184,29 @@ export const ModelPerformanceSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           <div className="md:col-span-4 lg:col-span-3 flex flex-col gap-6">
-            <Card className="h-full border-black/5 dark:border-white/10 bg-white/60 dark:bg-black/40 backdrop-blur-xl shadow-xl shadow-black/5 flex flex-col justify-between overflow-hidden relative group">
+            <Card className="h-full border-gray-300 dark:border-gray-700 bg-zinc-50/60 dark:bg-zinc-900/60 backdrop-blur-md shadow-xl shadow-black/10 flex flex-col justify-between overflow-hidden relative group">
               <CardContent className="p-6 space-y-8 relative z-10">
                 <div className="space-y-4">
                   <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg shadow-primary/20">
                     <BrainCircuit className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-foreground">
+                    <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
                       Model Status
                     </h3>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-zinc-500 dark:text-zinc-400">
                       System Health
                     </p>
                   </div>
                 </div>
 
                 <div className="space-y-4">
-                  <div className="p-3 rounded-xl bg-zinc-100/80 dark:bg-white/5 border border-black/5 dark:border-white/5 space-y-1">
-                    <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  <div className="p-3 rounded-xl bg-zinc-100/80 dark:bg-zinc-800/50 border border-gray-200 dark:border-gray-700 space-y-1">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                       <Cpu className="w-3 h-3" /> Active Model
                     </div>
                     <div
-                      className="font-mono text-sm font-medium truncate"
+                      className="font-mono text-sm font-medium truncate text-zinc-900 dark:text-zinc-100"
                       title={modelData?.model_name}
                     >
                       {isLoading ? (
@@ -213,11 +217,11 @@ export const ModelPerformanceSection = () => {
                     </div>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-zinc-100/80 dark:bg-white/5 border border-black/5 dark:border-white/5 space-y-1">
-                    <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  <div className="p-3 rounded-xl bg-zinc-100/80 dark:bg-zinc-800/50 border border-gray-200 dark:border-gray-700 space-y-1">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                       <Clock className="w-3 h-3" /> Last Trained
                     </div>
-                    <div className="font-mono text-sm font-medium">
+                    <div className="font-mono text-sm font-medium text-zinc-900 dark:text-zinc-100">
                       {isLoading ? (
                         <Skeleton className="h-5 w-20" />
                       ) : (
@@ -227,12 +231,12 @@ export const ModelPerformanceSection = () => {
                   </div>
                 </div>
 
-                <div className="mt-auto pt-4 border-t border-black/5 dark:border-white/5">
+                <div className="mt-auto pt-4 border-t border-gray-200 dark:border-gray-700">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-foreground/80">
+                    <span className="text-sm font-medium text-zinc-700 dark:text-zinc-400">
                       API Latency
                     </span>
-                    <span className="text-xs font-mono text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-md">
+                    <span className="text-xs font-mono text-emerald-500 dark:text-emerald-400 bg-emerald-500/10 dark:bg-emerald-400/20 px-2 py-1 rounded-md">
                       ~120ms
                     </span>
                   </div>
@@ -252,7 +256,7 @@ export const ModelPerformanceSection = () => {
               >
                 <Card
                   className={cn(
-                    "h-full border-black/5 dark:border-white/10 bg-white dark:bg-black/40 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg relative overflow-hidden group",
+                    "h-full border border-gray-300 dark:border-gray-700 bg-zinc-50/50 dark:bg-zinc-900/60 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg relative overflow-hidden group",
                     metric.border
                   )}
                 >
@@ -264,22 +268,22 @@ export const ModelPerformanceSection = () => {
                     </div>
 
                     <div>
-                      <div className="text-3xl font-bold tracking-tight mb-1 text-foreground">
+                      <div className="text-3xl font-bold tracking-tight mb-1 text-zinc-900 dark:text-zinc-100">
                         {isLoading ? (
                           <Skeleton className="h-8 w-16" />
                         ) : (
                           metric.display
                         )}
                       </div>
-                      <h4 className="font-semibold text-sm text-foreground/80">
+                      <h4 className="font-semibold text-sm text-zinc-700 dark:text-zinc-400">
                         {metric.label}
                       </h4>
-                      <p className="text-xs text-muted-foreground mt-1">
+                      <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
                         {metric.desc}
                       </p>
                     </div>
 
-                    <div className="absolute bottom-0 left-0 w-full h-1 bg-black/5 dark:bg-white/5">
+                    <div className="absolute bottom-0 left-0 w-full h-1 bg-gray-200 dark:bg-gray-700">
                       <motion.div
                         initial={{ width: 0 }}
                         whileInView={{
@@ -307,10 +311,10 @@ export const ModelPerformanceSection = () => {
               transition={{ delay: 0.4 }}
               className="sm:col-span-2 lg:col-span-4 mt-2"
             >
-              <Card className="bg-primary text-primary-foreground border-none shadow-2xl relative overflow-hidden">
+              <Card className="bg-primary/80 dark:bg-primary/70 text-primary-foreground border-none shadow-2xl relative overflow-hidden">
                 <CardContent className="p-8 relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
                   <div className="flex items-start gap-5">
-                    <div className="p-4 bg-white/20 backdrop-blur-md rounded-2xl shadow-inner border border-white/20">
+                    <div className="p-4 bg-white/20 dark:bg-white/10 backdrop-blur-md rounded-2xl shadow-inner border border-white/20 dark:border-white/10">
                       <Server className="w-8 h-8 text-white" />
                     </div>
                     <div className="space-y-2">
